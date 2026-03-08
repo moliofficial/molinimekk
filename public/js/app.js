@@ -99,7 +99,7 @@ function formatTimeAgo(ts) {
 }
 
 // ============================================================
-// PAGE ROUTER
+// PAGE ROUTER — pushState
 // ============================================================
 let currentPage = 'home';
 let latestPage = 1;
@@ -109,7 +109,54 @@ let currentGenreName = '';
 
 const pages = ['home', 'latest', 'search', 'genres', 'genre-detail', 'detail', 'watch', 'history'];
 
-function showPage(name, pushState = true) {
+// Map page name → URL path
+const PAGE_PATHS = {
+  'home': '/',
+  'latest': '/latest',
+  'search': '/search',
+  'genres': '/genres',
+  'genre-detail': '/genre',
+  'detail': '/detail',
+  'watch': '/watch',
+  'history': '/history',
+};
+
+function showPage(name, push = true, urlOverride = null) {
+  pages.forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if (el) el.classList.remove('active');
+  });
+  const target = document.getElementById('page-' + name);
+  if (target) target.classList.add('active');
+  currentPage = name;
+
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.toggle('active', l.dataset.page === name);
+  });
+
+  // Push URL
+  if (push) {
+    const path = urlOverride || PAGE_PATHS[name] || '/';
+    history.pushState({ page: name, url: urlOverride }, '', path);
+  }
+
+  // Auto-load data for simple pages
+  if (name === 'history') renderHistoryPage();
+  if (name === 'latest' && !document.getElementById('latestGrid').children.length) loadLatest(1);
+  if (name === 'genres' && !document.getElementById('genreGrid').children.length) loadGenres();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Handle browser back/forward
+window.addEventListener('popstate', (e) => {
+  const state = e.state;
+  if (!state) { _routeFromPath(location.pathname, location.search); return; }
+  _activatePage(state.page, false);
+  _loadPageData(state.page, state.url);
+});
+
+function _activatePage(name, push) {
   pages.forEach(p => {
     const el = document.getElementById('page-' + p);
     if (el) el.classList.remove('active');
@@ -123,20 +170,120 @@ function showPage(name, pushState = true) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ============================================================
-// HOME
-// ============================================================
-async function loadHome() {
-  try {
-    const res = await fetch('/api/home');
-    const data = await res.json();
-    renderLatestGrid('homeLatestGrid', data.latest || [], true);
-    renderGenreChips('homeGenreChips', data.genres || []);
-  } catch (e) {
-    document.getElementById('homeLatestGrid').innerHTML = errorState('Gagal memuat data home.');
-  }
-  renderHomeHistory();
+function _loadPageData(name, url) {
+  if (name === 'home') loadHome();
+  else if (name === 'latest') loadLatest(1);
+  else if (name === 'genres') loadGenres();
+  else if (name === 'history') renderHistoryPage();
+  else if (name === 'detail' && url) loadDetail(url);
+  else if (name === 'watch' && url) loadWatch(url, '', currentAnimeUrl, currentAnimeTitle, currentAnimeImage, currentEpisodes);
 }
+
+function _routeFromPath(path, search) {
+  const params = new URLSearchParams(search);
+  if (path === '/' || path === '') { _activatePage('home', false); loadHome(); }
+  else if (path === '/latest') { _activatePage('latest', false); loadLatest(1); }
+  else if (path === '/genres') { _activatePage('genres', false); loadGenres(); }
+  else if (path === '/history') { _activatePage('history', false); renderHistoryPage(); }
+  else if (path === '/search') { _activatePage('search', false); }
+  else if (path === '/detail') {
+    const u = params.get('url');
+    if (u) { _activatePage('detail', false); loadDetail(u); }
+    else { _activatePage('home', false); loadHome(); }
+  }
+  else if (path === '/watch') {
+    const u = params.get('url');
+    if (u) { _activatePage('watch', false); loadWatch(u, '', '', '', '', []); }
+    else { _activatePage('home', false); loadHome(); }
+  }
+  else if (path.startsWith('/genre/')) {
+    const slug = path.replace('/genre/', '').replace(/\/$/, '');
+    if (slug) { _activatePage('genre-detail', false); loadGenreDetail(slug, slug); }
+    else { _activatePage('genres', false); loadGenres(); }
+  }
+  else { _activatePage('home', false); loadHome(); }
+}
+
+// ============================================================
+// HOME SECTIONS (query-based genre rows)
+// ============================================================
+const HOME_SECTIONS = [
+  { title: '⚡ EPISODE TERBARU',    mode: 'latest' },
+  { title: '🌀 ISEKAI & FANTASY',   queries: ['isekai','reincarnation','maou','tensei'] },
+  { title: '⚔️ ACTION HITS',        queries: ['kimetsu','jujutsu','bleach','hunter','shingeki'] },
+  { title: '❤️ ROMANCE & DRAMA',    queries: ['love','kanojo','romance','heroine'] },
+  { title: '🏫 SCHOOL LIFE',        queries: ['school','gakuen','classroom','koukou'] },
+  { title: '✨ MAGIC & ADVENTURE',  queries: ['magic','adventure','dragon','dungeon'] },
+  { title: '😂 COMEDY & CHILL',     queries: ['comedy','bocchi','spy','slice'] },
+];
+
+function removeDuplicates(arr, key) {
+  return [...new Map(arr.map(item => [item[key], item])).values()];
+}
+
+async function loadHome() {
+  renderHomeHistory();
+  const sectionsContainer = document.getElementById('homeSections');
+  if (!sectionsContainer) return;
+  sectionsContainer.innerHTML = '';
+
+  HOME_SECTIONS.forEach(async (section) => {
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'home-section';
+    sectionEl.innerHTML =
+      '<div class="section-header" style="padding:0 24px;margin-bottom:14px;">' +
+        '<h2 class="section-title">' + section.title + '</h2>' +
+      '</div>' +
+      '<div class="hscroll-wrap">' +
+        '<div class="hscroll-inner hscroll-loading">' +
+          '<div class="loading-dots"><span></span><span></span><span></span></div>' +
+        '</div>' +
+      '</div>';
+    sectionsContainer.appendChild(sectionEl);
+    const scrollInner = sectionEl.querySelector('.hscroll-inner');
+
+    try {
+      let items = [];
+      if (section.mode === 'latest') {
+        const res = await fetch('/api/latest');
+        items = await res.json();
+      } else {
+        const results = await Promise.all(
+          section.queries.map(q =>
+            fetch('/api/search?q=' + encodeURIComponent(q)).then(r => r.json()).catch(() => [])
+          )
+        );
+        results.forEach(list => { if (Array.isArray(list)) items = [...items, ...list]; });
+        items = removeDuplicates(items, 'url');
+      }
+
+      if (!items.length) {
+        scrollInner.innerHTML = '<div style="font-family:var(--font-pixel);font-size:8px;color:var(--mc-stone);padding:20px;text-shadow:1px 1px 0 #000;">TIDAK ADA DATA</div>';
+        return;
+      }
+
+      scrollInner.classList.remove('hscroll-loading');
+      scrollInner.innerHTML = items.slice(0, 15).map(function(item) {
+        var ep = item.episode ? ('EP ' + item.episode) : (item.score ? ('⭐' + item.score) : '');
+        var title = item.title.length > 28 ? item.title.substring(0, 26) + '..' : item.title;
+        return (
+          '<div class="hscroll-card" onclick="loadDetail(\'' + esc(item.url) + '\')">' +
+            '<div class="hscroll-img-wrap">' +
+              '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" loading="lazy"' +
+                ' onerror="this.src=\'https://via.placeholder.com/120x170/1a1a1a/5aac27?text=?\'" />' +
+              (ep ? '<div class="hscroll-badge">' + ep + '</div>' : '') +
+            '</div>' +
+            '<div class="hscroll-title">' + esc(title) + '</div>' +
+          '</div>'
+        );
+      }).join('');
+
+    } catch(e) {
+      scrollInner.innerHTML = '<div style="font-family:var(--font-pixel);font-size:8px;color:var(--mc-stone);padding:20px;text-shadow:1px 1px 0 #000;">GAGAL MEMUAT</div>';
+    }
+  });
+}
+
 
 function renderHomeHistory() {
   const list = getHistory().slice(0, 6);
@@ -180,7 +327,7 @@ function historyItemHtml(h, p) {
 // ============================================================
 async function loadLatest(page = 1) {
   latestPage = page;
-  showPage('latest');
+  showPage('latest', true, page > 1 ? `/latest?page=${page}` : '/latest');
   document.getElementById('latestGrid').innerHTML = loadingState();
   try {
     const res = await fetch(`/api/latest?page=${page}`);
@@ -198,7 +345,7 @@ async function loadLatest(page = 1) {
 async function doSearch() {
   const q = document.getElementById('navSearch').value.trim();
   if (!q) return;
-  showPage('search');
+  showPage('search', true, `/search?q=${encodeURIComponent(q)}`);
   document.getElementById('searchDesc').textContent = `Hasil untuk: "${q}"`;
   document.getElementById('searchGrid').innerHTML = loadingState();
   try {
@@ -218,7 +365,7 @@ async function doSearch() {
 // GENRES
 // ============================================================
 async function loadGenres() {
-  showPage('genres');
+  showPage('genres', true, '/genres');
   document.getElementById('genreGrid').innerHTML = `<div class="loading-wrap"><div class="spinner"></div><span>Memuat genre...</span></div>`;
   try {
     const res = await fetch('/api/genres');
@@ -233,7 +380,7 @@ async function loadGenreDetail(slug, name, page = 1) {
   _genrePage = page;
   currentGenreSlug = slug;
   currentGenreName = name;
-  showPage('genre-detail');
+  showPage('genre-detail', true, `/genre/${slug}${page > 1 ? `?page=${page}` : ''}`);
   document.getElementById('genreDetailTitle').innerHTML = `<span class="title-icon">📦</span>${name}`;
   document.getElementById('genreDetailGrid').innerHTML = loadingState();
   try {
@@ -250,7 +397,7 @@ async function loadGenreDetail(slug, name, page = 1) {
 // DETAIL
 // ============================================================
 async function loadDetail(url) {
-  showPage('detail');
+  showPage('detail', true, `/detail?url=${encodeURIComponent(url)}`);
   document.getElementById('detailContent').innerHTML = `<div class="loading-wrap" style="min-height:60vh"><div class="spinner"></div><span>Memuat detail...</span></div>`;
   try {
     const res = await fetch(`/api/detail?url=${encodeURIComponent(url)}`);
@@ -261,7 +408,19 @@ async function loadDetail(url) {
   }
 }
 
+// Store current detail data globally so onclick doesn't need JSON in HTML
+let _detailData = null;
+let _detailUrl = '';
+
 function renderDetail(data, url) {
+  _detailData = data;
+  _detailUrl = url;
+  // Also store episodes globally for watch page
+  currentEpisodes = data.episodes || [];
+  currentAnimeTitle = data.title || '';
+  currentAnimeImage = data.image || '';
+  currentAnimeUrl = url;
+
   const prog = getProgress();
   const genreTags = (data.genres || []).map(g => {
     const slug = g.href ? g.href.replace(/.*\/genres\//, '').replace(/\/$/, '') : '';
@@ -275,12 +434,12 @@ function renderDetail(data, url) {
     </div>
   `).join('');
 
-  const epHtml = (data.episodes || []).map(ep => {
+  const epHtml = (data.episodes || []).map((ep, i) => {
     const p = prog[ep.url];
     const pct = p ? p.pct : 0;
     const timeStr = p && p.seconds ? ` ⏱${formatSeconds(p.seconds)}` : '';
     return `
-      <div class="ep-item" onclick="loadWatch('${esc(ep.url)}', '${esc(ep.title)}', '${esc(url)}', ${JSON.stringify(esc(data.title))}, ${JSON.stringify(esc(data.image))}, ${JSON.stringify(data.episodes || [])})">
+      <div class="ep-item" onclick="watchEpFromDetail(${i})">
         <div class="ep-play-icon">
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         </div>
@@ -335,11 +494,11 @@ let currentEpisodes = [];
 let progressInterval = null;
 
 async function loadWatch(url, title, animeUrl, animeTitle, animeImage, episodes) {
-  showPage('watch');
-  currentAnimeUrl = animeUrl || '';
-  currentAnimeTitle = animeTitle || '';
-  currentAnimeImage = animeImage || '';
-  currentEpisodes = episodes || [];
+  showPage('watch', true, `/watch?url=${encodeURIComponent(url)}`);
+  currentAnimeUrl = animeUrl || currentAnimeUrl || '';
+  currentAnimeTitle = animeTitle || currentAnimeTitle || '';
+  currentAnimeImage = animeImage || currentAnimeImage || '';
+  if (episodes && episodes.length) currentEpisodes = episodes;
   document.getElementById('watchContent').innerHTML = `<div class="loading-wrap" style="min-height:60vh"><div class="spinner"></div><span>Memuat player...</span></div>`;
   try {
     const res = await fetch(`/api/watch?url=${encodeURIComponent(url)}`);
@@ -389,7 +548,7 @@ function renderWatch(data, url, title) {
 
   // Build episode list from currentEpisodes or fallback
   const epListItems = currentEpisodes.length > 0
-    ? currentEpisodes.map(ep => buildWatchEpItem(ep, url)).join('')
+    ? currentEpisodes.map((ep, i) => buildWatchEpItem(ep, url, i)).join('')
     : '<div style="padding:20px;font-family:var(--font-pixel);font-size:8px;color:var(--mc-stone);text-shadow:1px 1px 0 #000;text-align:center;">BUKA DETAIL<br/>UNTUK LIST EP</div>';
 
   const prog = getProgressFor(url);
@@ -462,14 +621,27 @@ function renderWatch(data, url, title) {
   startProgressTracking(url, savedSec);
 }
 
-function buildWatchEpItem(ep, currentUrl) {
+// Called from detail page episode list
+function watchEpFromDetail(idx) {
+  const ep = currentEpisodes[idx];
+  if (!ep) return;
+  loadWatch(ep.url, ep.title, currentAnimeUrl, currentAnimeTitle, currentAnimeImage, currentEpisodes);
+}
+
+// Called from watch page episode list
+function watchEpFromPanel(idx) {
+  const ep = currentEpisodes[idx];
+  if (!ep) return;
+  loadWatch(ep.url, ep.title, currentAnimeUrl, currentAnimeTitle, currentAnimeImage, currentEpisodes);
+}
+
+function buildWatchEpItem(ep, currentUrl, idx) {
   const prog = getProgressFor(ep.url);
   const pct = prog ? prog.pct : 0;
   const timeStr = prog && prog.seconds ? ` ⏱${formatSeconds(prog.seconds)}` : '';
-  const isActive = ep.url === currentUrl || esc(ep.url) === esc(currentUrl);
+  const isActive = ep.url === currentUrl;
   return `
-    <div class="watch-ep-item ${isActive ? 'active' : ''}" 
-         onclick="loadWatch('${esc(ep.url)}', '${esc(ep.title)}', '${esc(currentAnimeUrl)}', ${JSON.stringify(esc(currentAnimeTitle))}, ${JSON.stringify(esc(currentAnimeImage))}, currentEpisodes)">
+    <div class="watch-ep-item ${isActive ? 'active' : ''}" onclick="watchEpFromPanel(${idx})">
       <div class="watch-ep-item-title">${esc(ep.title)}${timeStr ? `<span style="color:var(--mc-gold);font-size:11px;"> ${timeStr}</span>` : ''}</div>
       ${pct > 0 ? `<div class="watch-ep-progress-bar"><div class="watch-ep-progress-fill" style="width:${pct}%"></div></div>` : ''}
     </div>
@@ -658,13 +830,7 @@ function emptyState(icon, title, msg) {
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  loadHome();
+  // Route based on current URL when page first loads
+  _routeFromPath(location.pathname, location.search);
 });
 
-const _origShowPage = showPage;
-window.showPage = function(name, push) {
-  _origShowPage(name, push);
-  if (name === 'latest' && !document.getElementById('latestGrid').children.length) loadLatest(1);
-  if (name === 'genres' && !document.getElementById('genreGrid').children.length) loadGenres();
-  if (name === 'history') renderHistoryPage();
-};
