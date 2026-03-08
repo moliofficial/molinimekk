@@ -78,26 +78,7 @@
       <!-- Riwayat di home jika ada -->
       <div id="homeHistorySection"></div>
 
-      <section class="section">
-        <div class="section-header">
-          <h2 class="section-title"><span class="title-icon">⚡</span>EPISODE TERBARU</h2>
-          <a href="#" class="see-all" onclick="showPage('latest')">LIHAT SEMUA →</a>
-        </div>
-        <div class="anime-grid" id="homeLatestGrid">
-          <div class="skeleton-grid">
-            ${Array(12).fill('<div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line sk-short"></div></div>').join('')}
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-header">
-          <h2 class="section-title"><span class="title-icon">📦</span>GENRE ANIME</h2>
-        </div>
-        <div class="genre-chips" id="homeGenreChips">
-          <div class="loading-dots"><span></span><span></span><span></span></div>
-        </div>
-      </section>
+      <div id="homeSections" style="padding-bottom:40px;"></div>
     </div>
 
     <!-- LATEST PAGE -->
