@@ -440,3 +440,80 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
   .logo-text { font-size: 11px; }
   .anime-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 10px 20px; }
 }
+
+/* ===== HOME SECTIONS — HORIZONTAL SCROLL ===== */
+.home-section {
+  padding: 28px 0 20px;
+  border-bottom: 3px solid #000;
+}
+.home-section:last-child { border-bottom: none; }
+
+.hscroll-wrap {
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 4px 24px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mc-green-dark) var(--mc-coal);
+}
+.hscroll-wrap::-webkit-scrollbar { height: 8px; }
+.hscroll-wrap::-webkit-scrollbar-track { background: var(--mc-coal); border: 1px solid #000; }
+.hscroll-wrap::-webkit-scrollbar-thumb { background: var(--mc-green-dark); border: 1px solid #000; }
+
+.hscroll-inner {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  min-height: 180px;
+  align-items: flex-start;
+}
+.hscroll-loading {
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 0;
+}
+
+.hscroll-card {
+  width: 120px;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: var(--mc-stone-dark);
+  border: 2px solid #000;
+  border-right-color: #222;
+  border-bottom-color: #222;
+  box-shadow: var(--shadow-inset);
+  transition: filter 0.05s, transform 0.05s;
+}
+.hscroll-card:hover { filter: brightness(1.25); transform: translate(-2px,-2px); border-color: var(--mc-green); }
+.hscroll-card:active { transform: translate(2px,2px); }
+
+.hscroll-img-wrap {
+  position: relative;
+  width: 120px; height: 170px;
+  overflow: hidden;
+  background: var(--mc-coal);
+  border-bottom: 2px solid #000;
+}
+.hscroll-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hscroll-badge {
+  position: absolute; bottom: 4px; right: 4px;
+  background: var(--mc-coal);
+  border: 2px solid #000;
+  color: var(--mc-green-light);
+  font-family: var(--font-pixel); font-size: 6px;
+  padding: 2px 5px;
+  text-shadow: 1px 1px 0 #000;
+}
+.hscroll-title {
+  padding: 6px 7px;
+  font-family: var(--font-vt); font-size: 14px;
+  color: var(--mc-white); text-shadow: 1px 1px 0 #000;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.hscroll-card:hover .hscroll-title { color: var(--mc-green-light); }
