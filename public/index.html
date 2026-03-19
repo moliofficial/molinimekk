@@ -3,42 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kmoli — Streaming Anime Sub Indo</title>
-  <meta name="description" content="Kmoli - Situs streaming anime sub indo terlengkap dan tercepat. Nonton anime favorit kamu sekarang!" />
+  <title>Moli — Streaming Anime Sub Indo</title>
+  <meta name="description" content="Moli - Situs streaming anime sub indo terlengkap. Nonton anime favorit kamu sekarang!" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fredoka+One&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233d7a1a'/%3E%3Crect x='10' y='10' width='80' height='80' fill='%235aac27'/%3E%3Crect x='20' y='20' width='20' height='20' fill='%230d0d0d'/%3E%3Crect x='60' y='20' width='20' height='20' fill='%230d0d0d'/%3E%3Crect x='30' y='60' width='40' height='10' fill='%230d0d0d'/%3E%3C/svg%3E" />
 </head>
 <body>
 
-  <!-- NAVBAR -->
+  <!-- TOP NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
       <a class="logo" href="#" onclick="showPage('home')">
-        <span class="logo-icon">⛏️</span>
-        <span class="logo-text">K<span class="logo-accent">moli</span></span>
+        <span class="logo-icon">🍄</span>
+        <span class="logo-text">M<span class="logo-accent">oli</span></span>
       </a>
       <div class="nav-search">
         <input type="text" id="navSearch" placeholder="Cari anime..." autocomplete="off" />
         <button onclick="doSearch()" class="search-btn">🔍</button>
       </div>
-      <div class="nav-links">
-        <a href="#" class="nav-link active" onclick="showPage('home')" data-page="home">🏠 Home</a>
-        <a href="#" class="nav-link" onclick="showPage('genres')" data-page="genres">📦 Genre</a>
-        <a href="#" class="nav-link" onclick="showPage('latest')" data-page="latest">⚡ Terbaru</a>
-        <a href="#" class="nav-link" onclick="showPage('history')" data-page="history">📖 Riwayat</a>
+      <div class="nav-right">
+        <div class="nav-coins">🪙 <span>99</span></div>
       </div>
-      <button class="hamburger" id="hamburger" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="#" onclick="showPage('home');toggleMenu()">🏠 Home</a>
-      <a href="#" onclick="showPage('genres');toggleMenu()">📦 Genre</a>
-      <a href="#" onclick="showPage('latest');toggleMenu()">⚡ Terbaru</a>
-      <a href="#" onclick="showPage('history');toggleMenu()">📖 Riwayat</a>
     </div>
   </nav>
 
@@ -47,38 +34,50 @@
 
     <!-- HOME PAGE -->
     <div id="page-home" class="page active">
+
+      <!-- HERO BANNER -->
       <section class="hero">
-        <div class="hero-bg">
-          <div class="pixel-cloud cloud-1"></div>
-          <div class="pixel-cloud cloud-2"></div>
-          <div class="pixel-cloud cloud-3"></div>
-        </div>
+        <div class="hero-bg-art"></div>
         <div class="hero-content">
-          <div class="hero-badge">⚔️ #1 ANIME INDONESIA SERVER</div>
-          <h1 class="hero-title">
-            Nonton Anime<br/>
-            <span class="hero-gradient">Sub Indo</span>
-            <span class="hero-sub">Gratis & Tanpa Batas</span>
-          </h1>
-          <p class="hero-desc">Ribuan judul anime siap ditonton kapan saja. Kualitas terbaik, update tercepat.</p>
+          <div class="hero-badge">🌟 #2 TERPOPULER</div>
+          <h1 class="hero-title">Gankutsuou</h1>
           <div class="hero-actions">
-            <button class="btn-primary" onclick="showPage('latest')">⚡ MULAI NONTON</button>
-            <button class="btn-secondary" onclick="showPage('genres')">📦 JELAJAHI GENRE</button>
+            <button class="btn-watch" onclick="showPage('latest')">▶ Tonton</button>
+            <button class="btn-info" onclick="showPage('genres')">ℹ Detail</button>
           </div>
-          <div class="hero-stats">
-            <div class="stat"><span class="stat-num">5000+</span><span class="stat-label">Judul Anime</span></div>
-            <div class="stat-divider"></div>
-            <div class="stat"><span class="stat-num">HD</span><span class="stat-label">Kualitas Video</span></div>
-            <div class="stat-divider"></div>
-            <div class="stat"><span class="stat-num">SUB</span><span class="stat-label">Bahasa Indo</span></div>
-          </div>
+        </div>
+        <div class="slider-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
         </div>
       </section>
 
-      <!-- Riwayat di home jika ada -->
+      <!-- CATEGORY CHIPS -->
+      <div class="category-scroll">
+        <div class="category-inner">
+          <button class="cat-chip active" onclick="filterCat(this)">Semua</button>
+          <button class="cat-chip" onclick="filterCat(this)">Anime</button>
+          <button class="cat-chip" onclick="filterCat(this)">Donghua</button>
+          <button class="cat-chip" onclick="filterCat(this)">Action</button>
+          <button class="cat-chip" onclick="filterCat(this)">Fantasy</button>
+          <button class="cat-chip" onclick="filterCat(this)">Romance</button>
+          <button class="cat-chip" onclick="filterCat(this)">Comedy</button>
+          <button class="cat-chip" onclick="filterCat(this)">Isekai</button>
+        </div>
+      </div>
+
+      <!-- INFO TICKER -->
+      <div class="ticker-wrap">
+        <div class="ticker-icon">📡</div>
+        <div class="ticker-text">Anime &amp; Donghua subtitle Indonesia tersedia setiap hari di Moli.</div>
+      </div>
+
+      <!-- LANJUTKAN NONTON -->
       <div id="homeHistorySection"></div>
 
-      <div id="homeSections" style="padding-bottom:40px;"></div>
+      <!-- HOME SECTIONS -->
+      <div id="homeSections" style="padding-bottom:100px;"></div>
     </div>
 
     <!-- LATEST PAGE -->
@@ -91,7 +90,7 @@
       <div class="pagination" id="latestPagination"></div>
     </div>
 
-    <!-- SEARCH RESULTS PAGE -->
+    <!-- SEARCH PAGE -->
     <div id="page-search" class="page">
       <div class="page-header">
         <h1 class="page-title"><span class="title-icon">🔍</span>HASIL PENCARIAN</h1>
@@ -103,7 +102,7 @@
     <!-- GENRES PAGE -->
     <div id="page-genres" class="page">
       <div class="page-header">
-        <h1 class="page-title"><span class="title-icon">📦</span>SEMUA GENRE</h1>
+        <h1 class="page-title"><span class="title-icon">🎮</span>SEMUA GENRE</h1>
         <p class="page-desc">Temukan anime berdasarkan genre favorit kamu</p>
       </div>
       <div class="genre-grid" id="genreGrid"></div>
@@ -112,7 +111,7 @@
     <!-- GENRE DETAIL PAGE -->
     <div id="page-genre-detail" class="page">
       <div class="page-header">
-        <h1 class="page-title" id="genreDetailTitle"><span class="title-icon">📦</span>Genre</h1>
+        <h1 class="page-title" id="genreDetailTitle"><span class="title-icon">🎮</span>Genre</h1>
         <p class="page-desc">Daftar anime dalam genre ini</p>
       </div>
       <div class="anime-grid" id="genreDetailGrid"></div>
@@ -129,36 +128,80 @@
       <div id="watchContent"></div>
     </div>
 
-    <!-- HISTORY PAGE -->
+    <!-- LIBRARY/HISTORY PAGE -->
     <div id="page-history" class="page">
       <div class="page-header">
         <h1 class="page-title"><span class="title-icon">📖</span>RIWAYAT NONTON</h1>
-        <p class="page-desc">Lanjutkan tontonan kamu dari mana kamu tinggalkan</p>
+        <p class="page-desc">Lanjutkan tontonan kamu</p>
       </div>
       <div class="history-section">
         <div id="historyContent"></div>
       </div>
     </div>
 
+    <!-- SETTING PAGE -->
+    <div id="page-setting" class="page">
+      <div class="page-header">
+        <h1 class="page-title"><span class="title-icon">👤</span>PROFIL</h1>
+        <p class="page-desc">Pengaturan akun kamu</p>
+      </div>
+      <div class="setting-wrap">
+        <div class="profile-card">
+          <div class="profile-avatar">🍄</div>
+          <div class="profile-name">Pengangguran</div>
+          <div class="profile-sub">Member Moli</div>
+        </div>
+        <div class="setting-card" onclick="clearHistory()">
+          <div class="setting-icon">🗑</div>
+          <div class="setting-info">
+            <div class="setting-title">Hapus Riwayat</div>
+            <div class="setting-desc">Bersihkan semua riwayat nonton</div>
+          </div>
+          <span class="setting-arrow">›</span>
+        </div>
+        <div class="setting-card">
+          <div class="setting-icon">🍄</div>
+          <div class="setting-info">
+            <div class="setting-title">Tentang Moli</div>
+            <div class="setting-desc">Mario Edition v2.0</div>
+          </div>
+          <span class="setting-badge">v2.0</span>
+        </div>
+        <div class="setting-card">
+          <div class="setting-icon">🌐</div>
+          <div class="setting-info">
+            <div class="setting-title">Sumber Data</div>
+            <div class="setting-desc">Anime & Donghua Sub Indo</div>
+          </div>
+          <span class="setting-badge on">ON</span>
+        </div>
+      </div>
+    </div>
+
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="logo-icon">⛏️</span>
-        <span class="logo-text">K<span class="logo-accent">moli</span></span>
-      </div>
-      <p class="footer-desc">Streaming anime sub indo terlengkap & tercepat.<br/>Update setiap hari tanpa jeda.</p>
-      <div class="footer-links">
-        <a href="#" onclick="showPage('home')">Home</a>
-        <a href="#" onclick="showPage('latest')">Terbaru</a>
-        <a href="#" onclick="showPage('genres')">Genre</a>
-        <a href="#" onclick="showPage('history')">Riwayat</a>
-      </div>
-      <p class="footer-copy">© 2025 Kmoli. Made with ⛏️ for anime lovers.</p>
-    </div>
-  </footer>
+  <!-- BOTTOM NAVBAR -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="bnav-item active" onclick="showPage('home')" data-bnav="home">
+      <span class="bnav-icon">🏠</span>
+      <span class="bnav-label">Home</span>
+    </button>
+    <button class="bnav-item" onclick="showPage('genres')" data-bnav="genres">
+      <span class="bnav-icon">🎮</span>
+      <span class="bnav-label">Genre</span>
+    </button>
+    <button class="bnav-center-btn" onclick="focusSearch()">
+      <span>🔍</span>
+    </button>
+    <button class="bnav-item" onclick="showPage('history')" data-bnav="history">
+      <span class="bnav-icon">📁</span>
+      <span class="bnav-label">Library</span>
+    </button>
+    <button class="bnav-item" onclick="showPage('setting')" data-bnav="setting">
+      <span class="bnav-icon">👤</span>
+      <span class="bnav-label">Profil</span>
+    </button>
+  </nav>
 
   <!-- TOAST -->
   <div class="toast" id="toast"></div>
