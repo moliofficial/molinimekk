@@ -1,519 +1,636 @@
 /* =============================================
-   KMOLI — Minecraft Style CSS
-   Tema: Pixel × Dirt × Stone × Green
+   MOLI — Mario Edition CSS
+   Tema: Red × Blue × Yellow × Mushroom Kingdom
    ============================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fredoka+One&family=Nunito:wght@400;600;700;900&display=swap');
 
 :root {
-  --mc-green: #5aac27;
-  --mc-green-dark: #3d7a1a;
-  --mc-green-light: #7ed942;
-  --mc-dirt: #866043;
-  --mc-dirt-dark: #6b4c35;
-  --mc-stone: #8b8b8b;
-  --mc-stone-dark: #5a5a5a;
-  --mc-stone-light: #aaaaaa;
-  --mc-coal: #1a1a1a;
-  --mc-obsidian: #0d0d0d;
-  --mc-sky: #6ab0d4;
-  --mc-gold: #ffd700;
-  --mc-diamond: #5dfefe;
-  --mc-redstone: #e03030;
-  --mc-wood: #9c7a3c;
-  --mc-wood-dark: #7a5c2a;
-  --mc-white: #f0f0f0;
-  --mc-gray: #aaaaaa;
+  --mario-red: #e52222;
+  --mario-red-dark: #b01010;
+  --mario-blue: #2563eb;
+  --mario-blue-dark: #1d4ed8;
+  --mario-yellow: #f8c94e;
+  --mario-yellow-dark: #d4a017;
+  --mario-green: #16a34a;
+  --mario-green-light: #22c55e;
+  --mario-sky: #38bdf8;
+  --mario-dark: #0f0f1a;
+  --mario-dark2: #161625;
+  --mario-card: #1e1e32;
+  --mario-border: #2d2d48;
+  --mario-text: #f0f0ff;
+  --mario-muted: #8888aa;
+  --mario-coin: #f8c94e;
+
   --font-pixel: 'Press Start 2P', monospace;
-  --font-vt: 'VT323', monospace;
-  --nav-h: 64px;
-  --shadow-inset: inset 2px 2px 0 rgba(255,255,255,0.2), inset -2px -2px 0 rgba(0,0,0,0.4);
+  --font-fredoka: 'Fredoka One', cursive;
+  --font-nunito: 'Nunito', sans-serif;
+  --nav-h: 58px;
+  --bnav-h: 68px;
+  --radius: 14px;
+  --radius-sm: 8px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: auto; }
+html { scroll-behavior: smooth; }
 body {
-  background: #0d0d0d;
-  color: var(--mc-white);
-  font-family: var(--font-vt);
-  font-size: 18px;
-  line-height: 1.4;
+  background: var(--mario-dark);
+  color: var(--mario-text);
+  font-family: var(--font-nunito);
+  font-size: 15px;
+  line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(0,0,0,0.1) 31px, rgba(0,0,0,0.1) 32px),
-    repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(0,0,0,0.1) 31px, rgba(0,0,0,0.1) 32px);
 }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
-button { cursor: pointer; border: none; background: none; font-family: var(--font-vt); }
+button { cursor: pointer; border: none; background: none; font-family: var(--font-nunito); color: var(--mario-text); }
 
-::-webkit-scrollbar { width: 12px; }
-::-webkit-scrollbar-track { background: var(--mc-stone-dark); border: 2px solid #000; }
-::-webkit-scrollbar-thumb { background: var(--mc-green-dark); border: 2px solid #000; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--mario-dark2); }
+::-webkit-scrollbar-thumb { background: var(--mario-red); border-radius: 3px; }
 
-/* NAVBAR */
+/* ===== TOP NAVBAR ===== */
 .navbar {
   position: fixed; top: 0; left: 0; right: 0;
   height: var(--nav-h);
-  background: var(--mc-dirt-dark);
-  border-bottom: 4px solid #000;
+  background: var(--mario-dark2);
+  border-bottom: 2px solid var(--mario-border);
   z-index: 1000;
-  background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 8px);
+  backdrop-filter: blur(12px);
 }
 .nav-inner {
-  max-width: 1400px; margin: 0 auto; height: 100%;
-  display: flex; align-items: center; padding: 0 20px; gap: 16px;
+  max-width: 600px; margin: 0 auto; height: 100%;
+  display: flex; align-items: center; padding: 0 16px; gap: 12px;
 }
-.logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.logo-icon { font-size: 26px; }
+.logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.logo-icon { font-size: 24px; }
 .logo-text {
-  font-family: var(--font-pixel); font-size: 14px;
-  color: var(--mc-white); text-shadow: 3px 3px 0 #000;
+  font-family: var(--font-fredoka); font-size: 22px; font-weight: 400;
+  color: var(--mario-text); letter-spacing: 0.5px;
 }
-.logo-accent { color: var(--mc-green-light); text-shadow: 3px 3px 0 #1a4a00; }
+.logo-accent { color: var(--mario-red); }
 
 .nav-search {
-  flex: 1; max-width: 420px;
+  flex: 1;
   display: flex; align-items: center;
-  background: var(--mc-coal);
-  border: 3px solid #000; border-right-color: #555; border-bottom-color: #555;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid var(--mario-border);
+  border-radius: 50px;
   overflow: hidden;
+  transition: border-color 0.2s;
 }
-.nav-search:focus-within { border-color: var(--mc-diamond); }
+.nav-search:focus-within { border-color: var(--mario-red); }
 .nav-search input {
   flex: 1; background: none; border: none;
-  padding: 8px 14px; color: var(--mc-white);
-  font-family: var(--font-vt); font-size: 18px; outline: none;
+  padding: 7px 14px; color: var(--mario-text);
+  font-family: var(--font-nunito); font-size: 14px; outline: none;
 }
-.nav-search input::placeholder { color: var(--mc-stone); }
-.search-btn { padding: 8px 14px; color: var(--mc-green-light); font-size: 20px; }
-.search-btn:hover { background: rgba(90,172,39,0.2); }
+.nav-search input::placeholder { color: var(--mario-muted); }
+.search-btn { padding: 7px 12px; color: var(--mario-muted); font-size: 16px; }
 
-.nav-links { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-.nav-link {
-  padding: 8px 12px; font-family: var(--font-pixel); font-size: 8px;
-  color: var(--mc-gray); border: 2px solid transparent;
-  text-shadow: 1px 1px 0 #000; text-transform: uppercase;
-}
-.nav-link:hover, .nav-link.active {
-  background: var(--mc-green-dark); border-color: #000; color: var(--mc-white);
+.nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.nav-coins {
+  font-family: var(--font-fredoka); font-size: 16px;
+  color: var(--mario-coin);
+  background: rgba(248,201,78,0.12);
+  padding: 4px 10px; border-radius: 20px;
+  border: 1px solid rgba(248,201,78,0.3);
 }
 
-.hamburger { display: none; flex-direction: column; gap: 5px; padding: 8px; }
-.hamburger span { display: block; width: 24px; height: 3px; background: var(--mc-white); border: 1px solid #000; }
-.hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-.hamburger.open span:nth-child(2) { opacity: 0; }
-.hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+/* ===== MAIN ===== */
+.main-content {
+  margin-top: var(--nav-h);
+  min-height: calc(100vh - var(--nav-h));
+  position: relative; z-index: 1;
+}
 
-.mobile-menu { display: none; background: var(--mc-dirt-dark); border-bottom: 3px solid #000; padding: 8px; }
-.mobile-menu a { display: block; padding: 10px 14px; font-family: var(--font-pixel); font-size: 8px; color: var(--mc-white); text-shadow: 2px 2px 0 #000; border: 2px solid transparent; }
-.mobile-menu a:hover { background: var(--mc-green-dark); border-color: #000; }
-.mobile-menu.open { display: block; }
-
-/* MAIN */
-.main-content { margin-top: var(--nav-h); min-height: calc(100vh - var(--nav-h)); position: relative; z-index: 1; }
-
-/* PAGES */
+/* ===== PAGES ===== */
 .page { display: none; }
-.page.active { display: block; animation: pixelIn 0.1s steps(2) forwards; }
-@keyframes pixelIn { from { opacity: 0; } to { opacity: 1; } }
+.page.active { display: block; animation: fadeIn 0.25s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* HERO */
+/* ===== HERO ===== */
 .hero {
-  position: relative; min-height: 85vh;
-  display: flex; align-items: center;
-  overflow: hidden; padding: 60px 24px 160px;
-  background: linear-gradient(to bottom, #1a3a5c 0%, #2a5a8c 30%, #4a8a6c 60%, #3d7a3d 80%, #0d0d0d 100%);
-}
-.hero::before {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
-  background: repeating-linear-gradient(90deg, var(--mc-green) 0px, var(--mc-green) 32px, var(--mc-green-dark) 32px, var(--mc-green-dark) 64px);
-  border-top: 4px solid #000;
-}
-.hero::after {
-  content: ''; position: absolute; bottom: 80px; left: 0; right: 0; height: 32px;
-  background: repeating-linear-gradient(90deg, var(--mc-dirt) 0px, var(--mc-dirt) 32px, var(--mc-dirt-dark) 32px, var(--mc-dirt-dark) 64px);
-  border-top: 3px solid #000;
-}
-.hero-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-.pixel-cloud { position: absolute; background: rgba(255,255,255,0.9); border: 2px solid rgba(0,0,0,0.2); animation: cloudFloat linear infinite; }
-.pixel-cloud::before, .pixel-cloud::after { content: ''; position: absolute; background: inherit; border: inherit; }
-.cloud-1 { width: 64px; height: 32px; top: 15%; animation-duration: 40s; }
-.cloud-1::before { width: 32px; height: 32px; top: -24px; left: 8px; }
-.cloud-1::after  { width: 48px; height: 24px; top: -16px; left: 24px; }
-.cloud-2 { width: 96px; height: 32px; top: 25%; animation-duration: 55s; animation-delay: -20s; }
-.cloud-2::before { width: 48px; height: 32px; top: -28px; left: 16px; }
-.cloud-2::after  { width: 32px; height: 24px; top: -20px; left: 56px; }
-.cloud-3 { width: 48px; height: 24px; top: 10%; animation-duration: 35s; animation-delay: -10s; }
-@keyframes cloudFloat { from { transform: translateX(-200px); } to { transform: translateX(110vw); } }
-
-.hero-content { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; width: 100%; }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--mc-gold); border: 3px solid #000;
-  color: #000; padding: 6px 16px;
-  font-family: var(--font-pixel); font-size: 8px; margin-bottom: 28px;
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
-  animation: badgeBob 0.8s steps(4) infinite;
-}
-@keyframes badgeBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-
-.hero-title {
-  font-family: var(--font-pixel); font-size: clamp(18px, 4vw, 44px);
-  font-weight: 900; line-height: 1.5; margin-bottom: 24px;
-  text-shadow: 4px 4px 0 #000;
-}
-.hero-gradient { color: var(--mc-green-light); text-shadow: 4px 4px 0 var(--mc-green-dark); display: block; }
-.hero-sub { font-family: var(--font-vt); font-size: clamp(20px, 3vw, 30px); color: var(--mc-sky); display: block; text-shadow: 2px 2px 0 #000; }
-.hero-desc { font-size: 20px; color: var(--mc-gray); max-width: 500px; margin-bottom: 36px; line-height: 1.6; text-shadow: 1px 1px 0 #000; }
-.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
-
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--mc-green-dark); border: 3px solid #000; border-right-color: #1a3a0a; border-bottom-color: #1a3a0a;
-  color: white; font-family: var(--font-pixel); font-size: 9px; padding: 12px 22px;
-  text-shadow: 2px 2px 0 #000; box-shadow: var(--shadow-inset); text-transform: uppercase;
-}
-.btn-primary:hover { filter: brightness(1.3); }
-.btn-primary:active { transform: translate(2px, 2px); }
-.btn-secondary {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--mc-stone-dark); border: 3px solid #000; border-right-color: #222; border-bottom-color: #222;
-  color: var(--mc-white); font-family: var(--font-pixel); font-size: 9px; padding: 12px 22px;
-  text-shadow: 2px 2px 0 #000; box-shadow: var(--shadow-inset); text-transform: uppercase;
-}
-.btn-secondary:hover { filter: brightness(1.3); }
-
-.hero-stats { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-.stat { display: flex; flex-direction: column; }
-.stat-num { font-family: var(--font-pixel); font-size: 22px; color: var(--mc-gold); text-shadow: 3px 3px 0 #000; line-height: 1; }
-.stat-label { font-size: 16px; color: var(--mc-gray); text-shadow: 1px 1px 0 #000; }
-.stat-divider { width: 3px; height: 40px; background: var(--mc-stone); border: 1px solid #000; }
-
-/* SECTION */
-.section { max-width: 1400px; margin: 0 auto; padding: 40px 24px; }
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 10px; border-bottom: 3px solid #000; }
-.section-title { font-family: var(--font-pixel); font-size: 11px; color: var(--mc-green-light); text-shadow: 2px 2px 0 #000; display: flex; align-items: center; gap: 10px; }
-.title-icon { font-size: 18px; }
-.see-all { font-family: var(--font-pixel); font-size: 7px; color: var(--mc-green-light); padding: 5px 10px; background: var(--mc-green-dark); border: 2px solid #000; text-shadow: 1px 1px 0 #000; }
-.see-all:hover { filter: brightness(1.3); }
-
-/* ANIME GRID */
-.anime-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px; padding: 0 24px 40px; max-width: 1400px; margin: 0 auto;
-}
-.anime-card {
-  background: var(--mc-stone-dark); border: 3px solid #000;
-  border-right-color: #222; border-bottom-color: #222;
-  cursor: pointer; box-shadow: var(--shadow-inset); position: relative;
-}
-.anime-card:hover { filter: brightness(1.2); transform: translate(-2px,-2px); border-color: var(--mc-green); z-index:2; }
-.anime-card:active { transform: translate(2px,2px); }
-
-.card-img-wrap { position: relative; padding-top: 140%; overflow: hidden; background: var(--mc-coal); border-bottom: 2px solid #000; }
-.card-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 50%); }
-.card-play {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  width: 36px; height: 36px; background: var(--mc-green-dark); border: 3px solid #000;
-  display: flex; align-items: center; justify-content: center; opacity: 0;
-}
-.anime-card:hover .card-play { opacity: 1; }
-.card-play svg { width: 14px; height: 14px; fill: white; margin-left: 2px; }
-
-.card-badge { position: absolute; top: 5px; left: 5px; background: var(--mc-redstone); border: 2px solid #000; color: white; font-family: var(--font-pixel); font-size: 6px; padding: 2px 5px; text-shadow: 1px 1px 0 #000; }
-.card-ep-badge { position: absolute; top: 5px; right: 5px; background: var(--mc-coal); border: 2px solid #000; color: var(--mc-green-light); font-family: var(--font-pixel); font-size: 6px; padding: 2px 5px; text-shadow: 1px 1px 0 #000; }
-
-.card-body { padding: 10px 10px 8px; }
-.card-title { font-family: var(--font-vt); font-size: 15px; color: var(--mc-white); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; margin-bottom: 4px; text-shadow: 1px 1px 0 #000; }
-.anime-card:hover .card-title { color: var(--mc-green-light); }
-.card-meta { font-size: 13px; color: var(--mc-gray); display: flex; gap: 6px; }
-.card-score { color: var(--mc-gold); text-shadow: 1px 1px 0 #000; }
-
-/* SKELETON */
-.skeleton-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; width: 100%; }
-.skeleton-card { background: var(--mc-stone-dark); border: 3px solid #000; overflow: hidden; }
-.sk-img { padding-top: 140%; background: var(--mc-stone); animation: shimmer 0.8s steps(2) infinite; }
-.sk-line { height: 10px; background: var(--mc-stone); margin: 10px 10px 8px; animation: shimmer 0.8s steps(2) infinite; }
-.sk-short { width: 60%; }
-@keyframes shimmer { 0%,100% { opacity: 0.3; } 50% { opacity: 0.7; } }
-
-/* GENRE */
-.genre-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.genre-chip { background: var(--mc-stone-dark); border: 3px solid #000; border-right-color: #222; border-bottom-color: #222; color: var(--mc-white); padding: 6px 12px; font-family: var(--font-pixel); font-size: 7px; cursor: pointer; text-shadow: 1px 1px 0 #000; box-shadow: var(--shadow-inset); text-transform: uppercase; }
-.genre-chip:hover { filter: brightness(1.3); background: var(--mc-green-dark); border-color: var(--mc-green); }
-
-.genre-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; padding: 0 24px 40px; max-width: 1400px; margin: 0 auto; }
-.genre-card { background: var(--mc-stone-dark); border: 3px solid #000; border-right-color: #222; border-bottom-color: #222; padding: 18px; cursor: pointer; text-align: center; box-shadow: var(--shadow-inset); }
-.genre-card:hover { filter: brightness(1.3); background: var(--mc-wood-dark); border-color: var(--mc-wood); }
-.genre-card:active { transform: translate(2px,2px); }
-.genre-name { font-family: var(--font-pixel); font-size: 9px; color: var(--mc-white); text-shadow: 2px 2px 0 #000; text-transform: uppercase; }
-.genre-card:hover .genre-name { color: var(--mc-gold); }
-
-/* PAGE HEADER */
-.page-header { max-width: 1400px; margin: 0 auto; padding: 36px 24px 24px; border-bottom: 4px solid #000; margin-bottom: 24px; background: var(--mc-dirt-dark); }
-.page-title { font-family: var(--font-pixel); font-size: clamp(12px, 3vw, 20px); font-weight: 900; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; text-shadow: 3px 3px 0 #000; color: var(--mc-green-light); }
-.page-desc { color: var(--mc-gray); font-size: 18px; text-shadow: 1px 1px 0 #000; }
-
-/* DETAIL */
-.detail-wrapper { max-width: 1400px; margin: 0 auto; padding: 28px 24px; }
-.detail-hero { display: grid; grid-template-columns: 200px 1fr; gap: 28px; margin-bottom: 32px; }
-.detail-poster { border: 4px solid #000; border-right-color: #222; border-bottom-color: #222; overflow: hidden; box-shadow: 6px 6px 0 #000; flex-shrink: 0; }
-.detail-poster img { width: 100%; display: block; }
-.detail-info { flex: 1; }
-.detail-title { font-family: var(--font-pixel); font-size: clamp(10px, 2vw, 18px); font-weight: 900; line-height: 1.8; margin-bottom: 14px; text-shadow: 3px 3px 0 #000; color: var(--mc-green-light); }
-.detail-genres { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-.genre-tag { background: var(--mc-wood-dark); border: 2px solid #000; color: var(--mc-gold); padding: 4px 10px; font-family: var(--font-pixel); font-size: 7px; cursor: pointer; text-shadow: 1px 1px 0 #000; text-transform: uppercase; }
-.genre-tag:hover { filter: brightness(1.3); }
-.detail-desc { color: var(--mc-gray); line-height: 1.7; font-size: 18px; margin-bottom: 18px; text-shadow: 1px 1px 0 #000; max-width: 700px; }
-
-.detail-meta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; margin-bottom: 20px; }
-.meta-item { background: var(--mc-coal); border: 2px solid #000; border-right-color: #444; border-bottom-color: #444; padding: 8px 12px; box-shadow: var(--shadow-inset); }
-.meta-key { font-family: var(--font-pixel); font-size: 6px; color: var(--mc-diamond); text-transform: uppercase; margin-bottom: 3px; text-shadow: 1px 1px 0 #000; }
-.meta-val { font-size: 15px; color: var(--mc-white); text-shadow: 1px 1px 0 #000; }
-
-.ep-section-title { font-family: var(--font-pixel); font-size: 10px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; text-shadow: 2px 2px 0 #000; color: var(--mc-green-light); }
-.ep-count { background: var(--mc-redstone); border: 2px solid #000; color: white; font-family: var(--font-pixel); font-size: 7px; padding: 2px 7px; text-shadow: 1px 1px 0 #000; }
-.episode-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
-.ep-item { background: var(--mc-stone-dark); border: 2px solid #000; border-right-color: #222; border-bottom-color: #222; padding: 9px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-inset); }
-.ep-item:hover { filter: brightness(1.3); background: var(--mc-green-dark); border-color: var(--mc-green); }
-.ep-item:active { transform: translate(2px,2px); }
-.ep-play-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--mc-green-dark); border: 2px solid #000; display: flex; align-items: center; justify-content: center; }
-.ep-play-icon svg { width: 10px; height: 10px; fill: white; margin-left: 2px; }
-.ep-info { flex: 1; min-width: 0; }
-.ep-title { font-family: var(--font-vt); font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 1px 1px 0 #000; }
-.ep-date { font-size: 13px; color: var(--mc-gray); text-shadow: 1px 1px 0 #000; }
-
-/* WATCH PAGE */
-.watch-wrapper {
-  max-width: 1400px; margin: 0 auto; padding: 24px;
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  grid-template-areas:
-    "back back"
-    "title title"
-    "video eplist"
-    "servers eplist"
-    "naveps eplist"
-    "download eplist";
-  gap: 12px;
-  align-items: start;
-}
-.watch-back-area { grid-area: back; }
-.watch-title-area { grid-area: title; }
-.watch-video-area { grid-area: video; }
-.watch-servers-area { grid-area: servers; }
-.watch-naveps-area { grid-area: naveps; }
-.watch-download-area { grid-area: download; }
-.watch-eplist-area {
-  grid-area: eplist;
-  position: sticky; top: calc(var(--nav-h) + 10px);
-  max-height: calc(100vh - var(--nav-h) - 20px);
-  display: flex; flex-direction: column;
-}
-
-.watch-title { font-family: var(--font-pixel); font-size: clamp(9px, 1.5vw, 14px); color: var(--mc-green-light); text-shadow: 2px 2px 0 #000; line-height: 1.7; }
-.server-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
-.server-tab { background: var(--mc-stone-dark); border: 2px solid #000; border-right-color: #222; border-bottom-color: #222; color: var(--mc-gray); padding: 6px 12px; font-family: var(--font-pixel); font-size: 7px; cursor: pointer; text-shadow: 1px 1px 0 #000; box-shadow: var(--shadow-inset); text-transform: uppercase; }
-.server-tab:hover, .server-tab.active { filter: brightness(1.3); background: var(--mc-green-dark); border-color: var(--mc-green); color: var(--mc-white); }
-
-.video-container { background: #000; border: 4px solid #000; border-right-color: #333; border-bottom-color: #333; position: relative; padding-top: 56.25%; box-shadow: 6px 6px 0 #000; }
-.video-container iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-.no-stream { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--mc-gray); gap: 10px; font-family: var(--font-pixel); font-size: 9px; text-align: center; text-shadow: 2px 2px 0 #000; }
-.no-stream-icon { font-size: 40px; }
-
-.nav-eps { display: flex; justify-content: space-between; }
-.ep-nav-btn { display: flex; align-items: center; gap: 6px; background: var(--mc-stone-dark); border: 3px solid #000; border-right-color: #222; border-bottom-color: #222; color: var(--mc-white); font-family: var(--font-pixel); font-size: 7px; padding: 9px 14px; cursor: pointer; text-shadow: 1px 1px 0 #000; box-shadow: var(--shadow-inset); text-transform: uppercase; }
-.ep-nav-btn:hover:not(:disabled) { filter: brightness(1.3); background: var(--mc-green-dark); }
-.ep-nav-btn:active:not(:disabled) { transform: translate(2px,2px); }
-.ep-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-/* WATCH EP PANEL */
-.watch-ep-panel { background: var(--mc-coal); border: 3px solid #000; border-right-color: #333; border-bottom-color: #333; display: flex; flex-direction: column; overflow: hidden; height: 100%; }
-.watch-ep-panel-header { background: var(--mc-dirt-dark); border-bottom: 3px solid #000; padding: 10px 12px; font-family: var(--font-pixel); font-size: 8px; color: var(--mc-green-light); text-shadow: 2px 2px 0 #000; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.watch-ep-list { flex: 1; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 3px; }
-.watch-ep-list::-webkit-scrollbar { width: 8px; }
-.watch-ep-list::-webkit-scrollbar-track { background: var(--mc-coal); }
-.watch-ep-list::-webkit-scrollbar-thumb { background: var(--mc-green-dark); border: 1px solid #000; }
-
-.watch-ep-item { background: var(--mc-stone-dark); border: 2px solid #000; border-right-color: #222; border-bottom-color: #222; padding: 7px 10px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; box-shadow: var(--shadow-inset); position: relative; }
-.watch-ep-item:hover { filter: brightness(1.3); background: var(--mc-green-dark); border-color: var(--mc-green); }
-.watch-ep-item.active { background: var(--mc-green-dark); border-color: var(--mc-green-light); }
-.watch-ep-item.active::before { content: '▶'; position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: var(--mc-green-light); font-size: 8px; }
-.watch-ep-item.active { padding-left: 20px; }
-.watch-ep-item-title { font-family: var(--font-vt); font-size: 14px; text-shadow: 1px 1px 0 #000; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.watch-ep-item-progress { font-family: var(--font-pixel); font-size: 6px; color: var(--mc-gold); text-shadow: 1px 1px 0 #000; }
-.watch-ep-progress-bar { height: 3px; background: var(--mc-coal); border: 1px solid #000; margin-top: 2px; }
-.watch-ep-progress-fill { height: 100%; background: var(--mc-green); }
-
-/* DOWNLOAD */
-.download-section { margin-top: 0; }
-.download-title { font-family: var(--font-pixel); font-size: 9px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; text-shadow: 2px 2px 0 #000; color: var(--mc-gold); }
-.download-groups { display: flex; flex-direction: column; gap: 6px; }
-.dl-group { background: var(--mc-coal); border: 2px solid #000; border-right-color: #333; border-bottom-color: #333; padding: 10px; box-shadow: var(--shadow-inset); }
-.dl-quality { font-family: var(--font-pixel); font-size: 7px; color: var(--mc-diamond); margin-bottom: 7px; text-shadow: 1px 1px 0 #000; }
-.dl-links { display: flex; flex-wrap: wrap; gap: 5px; }
-.dl-link { background: var(--mc-stone-dark); border: 2px solid #000; border-right-color: #222; border-bottom-color: #222; color: var(--mc-gray); font-family: var(--font-pixel); font-size: 6px; padding: 4px 10px; text-shadow: 1px 1px 0 #000; box-shadow: var(--shadow-inset); text-transform: uppercase; }
-.dl-link:hover { filter: brightness(1.4); background: var(--mc-wood-dark); color: var(--mc-gold); }
-
-.back-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--mc-stone-dark); border: 3px solid #000; border-right-color: #222; border-bottom-color: #222; color: var(--mc-gray); font-family: var(--font-pixel); font-size: 7px; padding: 8px 14px; cursor: pointer; margin-bottom: 12px; text-shadow: 1px 1px 0 #000; box-shadow: var(--shadow-inset); text-transform: uppercase; }
-.back-btn:hover { filter: brightness(1.3); color: var(--mc-white); }
-.back-btn:active { transform: translate(2px,2px); }
-
-/* RIWAYAT */
-.history-section { max-width: 1400px; margin: 0 auto; padding: 0 24px 40px; }
-.history-panel { background: var(--mc-coal); border: 3px solid #000; border-right-color: #333; border-bottom-color: #333; }
-.history-header { background: var(--mc-wood-dark); border-bottom: 3px solid #000; padding: 12px 16px; font-family: var(--font-pixel); font-size: 9px; color: var(--mc-gold); text-shadow: 2px 2px 0 #000; display: flex; align-items: center; justify-content: space-between; }
-.history-clear-btn { font-family: var(--font-pixel); font-size: 7px; background: var(--mc-redstone); border: 2px solid #000; color: #fff; padding: 4px 10px; text-shadow: 1px 1px 0 #000; cursor: pointer; }
-.history-clear-btn:hover { filter: brightness(1.3); }
-.history-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-.history-item { padding: 12px 12px; border-bottom: 2px solid #111; border-right: 2px solid #111; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-.history-item:hover { filter: brightness(1.3); background: var(--mc-stone-dark); }
-.history-thumb { width: 44px; height: 62px; flex-shrink: 0; border: 2px solid #000; object-fit: cover; }
-.history-info { flex: 1; min-width: 0; }
-.history-title { font-family: var(--font-vt); font-size: 15px; text-shadow: 1px 1px 0 #000; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 2px; }
-.history-ep { font-family: var(--font-pixel); font-size: 6px; color: var(--mc-green-light); text-shadow: 1px 1px 0 #000; margin-bottom: 3px; }
-.history-time { font-family: var(--font-pixel); font-size: 6px; color: var(--mc-gold); text-shadow: 1px 1px 0 #000; }
-.history-progress-bar { width: 100%; height: 4px; background: var(--mc-stone-dark); border: 1px solid #000; margin-top: 4px; }
-.history-progress-fill { height: 100%; background: var(--mc-green); }
-.history-empty { padding: 40px; font-family: var(--font-pixel); font-size: 9px; color: var(--mc-stone); text-align: center; text-shadow: 1px 1px 0 #000; grid-column: 1 / -1; }
-
-/* PAGINATION */
-.pagination { display: flex; justify-content: center; align-items: center; gap: 6px; padding: 20px; flex-wrap: wrap; }
-.page-btn { background: var(--mc-stone-dark); border: 3px solid #000; border-right-color: #222; border-bottom-color: #222; color: var(--mc-gray); width: 38px; height: 38px; font-family: var(--font-pixel); font-size: 9px; cursor: pointer; text-shadow: 1px 1px 0 #000; box-shadow: var(--shadow-inset); display: flex; align-items: center; justify-content: center; }
-.page-btn:hover, .page-btn.active { filter: brightness(1.3); background: var(--mc-green-dark); border-color: var(--mc-green); color: white; }
-
-/* LOADING */
-.loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; gap: 20px; color: var(--mc-gray); }
-.spinner { width: 36px; height: 36px; background: var(--mc-green-dark); border: 3px solid #000; animation: mcSpin 0.4s steps(4) infinite; }
-@keyframes mcSpin { to { transform: rotate(360deg); } }
-.loading-wrap span { font-family: var(--font-pixel); font-size: 9px; text-shadow: 2px 2px 0 #000; }
-
-.loading-dots { display: flex; gap: 5px; padding: 18px; }
-.loading-dots span { width: 10px; height: 10px; background: var(--mc-green); border: 2px solid #000; animation: dotBounce 0.8s steps(2) infinite; }
-.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes dotBounce { 0%,80%,100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
-
-.empty-state { text-align: center; padding: 60px 24px; color: var(--mc-gray); }
-.empty-icon { font-size: 48px; margin-bottom: 14px; display: block; }
-.empty-title { font-family: var(--font-pixel); font-size: 11px; margin-bottom: 8px; color: var(--mc-white); text-shadow: 2px 2px 0 #000; }
-
-/* FOOTER */
-.footer { background: var(--mc-dirt-dark); border-top: 4px solid #000; padding: 36px 24px; position: relative; z-index: 1; background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 2px, transparent 2px, transparent 8px); }
-.footer-inner { max-width: 600px; margin: 0 auto; text-align: center; }
-.footer-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; }
-.footer-desc { color: var(--mc-gray); font-size: 17px; line-height: 1.7; margin-bottom: 18px; text-shadow: 1px 1px 0 #000; }
-.footer-links { display: flex; justify-content: center; gap: 18px; margin-bottom: 18px; }
-.footer-links a { color: var(--mc-gray); font-family: var(--font-pixel); font-size: 7px; text-shadow: 1px 1px 0 #000; text-transform: uppercase; }
-.footer-links a:hover { color: var(--mc-green-light); }
-.footer-copy { font-family: var(--font-pixel); font-size: 7px; color: var(--mc-stone); text-shadow: 1px 1px 0 #000; }
-
-/* TOAST */
-.toast { position: fixed; bottom: 24px; right: 24px; background: var(--mc-coal); border: 3px solid #000; border-left: 4px solid var(--mc-green); color: var(--mc-white); font-family: var(--font-pixel); font-size: 8px; padding: 12px 16px; z-index: 9999; transform: translateY(80px); opacity: 0; transition: all 0.15s steps(3); max-width: 280px; box-shadow: 4px 4px 0 #000; text-shadow: 1px 1px 0 #000; line-height: 1.6; }
-.toast.show { transform: translateY(0); opacity: 1; }
-
-.glow-line { height: 4px; background: repeating-linear-gradient(90deg, var(--mc-green-dark) 0px, var(--mc-green-dark) 8px, var(--mc-green) 8px, var(--mc-green) 16px); border-top: 2px solid #000; border-bottom: 2px solid #000; }
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .watch-wrapper { grid-template-columns: 1fr; grid-template-areas: "back" "title" "video" "servers" "naveps" "eplist" "download"; }
-  .watch-eplist-area { position: static; max-height: 380px; }
-}
-@media (max-width: 768px) {
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .hero { padding: 40px 16px 160px; }
-  .anime-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; padding: 0 14px 32px; }
-  .section { padding: 24px 14px; }
-  .detail-hero { grid-template-columns: 1fr; }
-  .detail-poster { max-width: 160px; margin: 0 auto; }
-  .page-header { padding: 24px 16px 18px; }
-  .episode-list { grid-template-columns: 1fr; }
-  .history-list { grid-template-columns: 1fr; }
-}
-@media (max-width: 480px) {
-  :root { --nav-h: 56px; }
-  .nav-inner { padding: 0 12px; }
-  .logo-text { font-size: 11px; }
-  .anime-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 10px 20px; }
-}
-
-/* ===== HOME SECTIONS — HORIZONTAL SCROLL ===== */
-.home-section {
-  padding: 28px 0 20px;
-  border-bottom: 3px solid #000;
-}
-.home-section:last-child { border-bottom: none; }
-
-.hscroll-wrap {
-  overflow-x: auto;
-  overflow-y: visible;
-  padding: 4px 24px 12px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--mc-green-dark) var(--mc-coal);
-}
-.hscroll-wrap::-webkit-scrollbar { height: 8px; }
-.hscroll-wrap::-webkit-scrollbar-track { background: var(--mc-coal); border: 1px solid #000; }
-.hscroll-wrap::-webkit-scrollbar-thumb { background: var(--mc-green-dark); border: 1px solid #000; }
-
-.hscroll-inner {
-  display: flex;
-  gap: 10px;
-  width: max-content;
-  min-height: 180px;
-  align-items: flex-start;
-}
-.hscroll-loading {
-  width: 100%;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 20px 0;
-}
-
-.hscroll-card {
-  width: 120px;
-  flex-shrink: 0;
-  cursor: pointer;
-  background: var(--mc-stone-dark);
-  border: 2px solid #000;
-  border-right-color: #222;
-  border-bottom-color: #222;
-  box-shadow: var(--shadow-inset);
-  transition: filter 0.05s, transform 0.05s;
-}
-.hscroll-card:hover { filter: brightness(1.25); transform: translate(-2px,-2px); border-color: var(--mc-green); }
-.hscroll-card:active { transform: translate(2px,2px); }
-
-.hscroll-img-wrap {
-  position: relative;
-  width: 120px; height: 170px;
+  position: relative; min-height: 52vw; max-height: 340px;
   overflow: hidden;
-  background: var(--mc-coal);
-  border-bottom: 2px solid #000;
+  background: linear-gradient(135deg, #0f0f2a 0%, #1a1040 50%, #2a0a3a 100%);
 }
-.hscroll-img-wrap img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
+.hero-bg-art {
+  position: absolute; inset: 0;
+  background: 
+    radial-gradient(ellipse at 70% 40%, rgba(229,34,34,0.3) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(37,99,235,0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 90%, rgba(248,201,78,0.15) 0%, transparent 40%);
+  animation: heroPulse 4s ease-in-out infinite;
 }
+@keyframes heroPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+/* Mario block pattern */
+.hero::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 28px;
+  background: repeating-linear-gradient(90deg,
+    var(--mario-dark2) 0px, var(--mario-dark2) 28px,
+    var(--mario-border) 28px, var(--mario-border) 29px
+  );
+  border-top: 2px solid var(--mario-border);
+  opacity: 0.6;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 40px 20px 50px;
+  max-width: 600px; margin: 0 auto;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--mario-red); color: white;
+  padding: 4px 12px; border-radius: 20px;
+  font-family: var(--font-fredoka); font-size: 13px;
+  margin-bottom: 12px; letter-spacing: 0.5px;
+}
+.hero-title {
+  font-family: var(--font-fredoka); font-size: clamp(26px, 7vw, 48px);
+  font-weight: 400; line-height: 1.2; margin-bottom: 20px;
+  text-shadow: 2px 4px 12px rgba(0,0,0,0.6);
+}
+.hero-accent { color: var(--mario-red); }
+.hero-desc { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 20px; }
+.hero-actions { display: flex; gap: 10px; }
+
+.btn-watch {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--mario-red); color: white;
+  padding: 10px 22px; border-radius: 50px;
+  font-family: var(--font-fredoka); font-size: 16px;
+  box-shadow: 0 4px 15px rgba(229,34,34,0.4);
+  transition: all 0.2s;
+}
+.btn-watch:hover { filter: brightness(1.15); transform: translateY(-1px); }
+
+.btn-info {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.15); color: white;
+  padding: 10px 22px; border-radius: 50px;
+  font-family: var(--font-fredoka); font-size: 16px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+}
+.btn-info:hover { background: rgba(255,255,255,0.22); }
+
+.slider-dots {
+  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 6px; z-index: 3;
+}
+.dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transition: all 0.2s;
+}
+.dot.active { background: var(--mario-red); width: 20px; border-radius: 4px; }
+
+/* ===== CATEGORY SCROLL ===== */
+.category-scroll {
+  padding: 14px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.category-scroll::-webkit-scrollbar { display: none; }
+.category-inner {
+  display: flex; gap: 8px; padding: 0 16px;
+  width: max-content;
+}
+.cat-chip {
+  padding: 6px 16px; border-radius: 50px;
+  background: var(--mario-card); border: 1.5px solid var(--mario-border);
+  font-family: var(--font-nunito); font-size: 13px; font-weight: 600;
+  color: var(--mario-muted); white-space: nowrap;
+  transition: all 0.18s;
+}
+.cat-chip:hover { border-color: var(--mario-red); color: var(--mario-text); }
+.cat-chip.active {
+  background: var(--mario-red); border-color: var(--mario-red);
+  color: white; box-shadow: 0 2px 10px rgba(229,34,34,0.35);
+}
+
+/* ===== TICKER ===== */
+.ticker-wrap {
+  display: flex; align-items: center; gap: 10px;
+  margin: 4px 16px 14px;
+  background: rgba(37,99,235,0.12);
+  border: 1px solid rgba(37,99,235,0.3);
+  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+}
+.ticker-icon { font-size: 16px; flex-shrink: 0; }
+.ticker-text { font-size: 13px; color: var(--mario-sky); font-weight: 600; line-height: 1.3; }
+
+/* ===== HOME SECTIONS ===== */
+.home-section { margin-bottom: 8px; }
+.section { max-width: 600px; margin: 0 auto; padding: 16px 0; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px; padding: 0 16px;
+}
+.section-title {
+  font-family: var(--font-fredoka); font-size: 18px; color: var(--mario-text);
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.section-title-dot.red { background: var(--mario-red); box-shadow: 0 0 8px var(--mario-red); }
+.section-title-dot.yellow { background: var(--mario-yellow); box-shadow: 0 0 8px var(--mario-yellow); }
+.title-icon { font-size: 16px; }
+.see-all {
+  font-family: var(--font-nunito); font-size: 12px; font-weight: 700;
+  color: var(--mario-muted); padding: 4px 10px;
+  background: transparent; border: 1px solid var(--mario-border);
+  border-radius: 50px; transition: all 0.2s;
+}
+.see-all:hover { color: var(--mario-red); border-color: var(--mario-red); }
+
+/* ===== HORIZONTAL SCROLL ===== */
+.hscroll-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.hscroll-wrap::-webkit-scrollbar { display: none; }
+.hscroll-inner {
+  display: flex; gap: 10px; padding: 4px 16px 8px;
+  width: max-content;
+}
+.hscroll-loading { width: 100%; min-width: 200px; padding: 20px 16px; }
+.hscroll-card {
+  width: 110px; flex-shrink: 0; cursor: pointer;
+  transition: transform 0.18s;
+}
+.hscroll-card:hover { transform: translateY(-4px); }
+.hscroll-img-wrap {
+  position: relative; width: 110px; height: 155px;
+  border-radius: var(--radius-sm); overflow: hidden;
+  background: var(--mario-card);
+}
+.hscroll-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
 .hscroll-badge {
-  position: absolute; bottom: 4px; right: 4px;
-  background: var(--mc-coal);
-  border: 2px solid #000;
-  color: var(--mc-green-light);
-  font-family: var(--font-pixel); font-size: 6px;
-  padding: 2px 5px;
-  text-shadow: 1px 1px 0 #000;
+  position: absolute; bottom: 6px; left: 6px;
+  background: var(--mario-red); color: white;
+  font-family: var(--font-fredoka); font-size: 11px;
+  padding: 2px 7px; border-radius: 4px;
 }
 .hscroll-title {
-  padding: 6px 7px;
-  font-family: var(--font-vt); font-size: 14px;
-  color: var(--mc-white); text-shadow: 1px 1px 0 #000;
-  line-height: 1.3;
-  overflow: hidden;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  margin-top: 6px; font-size: 12px; font-weight: 700;
+  color: var(--mario-text); line-height: 1.3;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
 }
-.hscroll-card:hover .hscroll-title { color: var(--mc-green-light); }
+
+/* ===== HISTORY ON HOME ===== */
+.continue-section { padding: 16px 0; }
+.continue-scroll { overflow-x: auto; scrollbar-width: none; }
+.continue-scroll::-webkit-scrollbar { display: none; }
+.continue-inner { display: flex; gap: 10px; padding: 4px 16px; width: max-content; }
+.continue-card {
+  width: 140px; flex-shrink: 0; cursor: pointer;
+  transition: transform 0.18s;
+}
+.continue-card:hover { transform: translateY(-3px); }
+.continue-thumb {
+  position: relative; width: 140px; height: 85px;
+  border-radius: var(--radius-sm); overflow: hidden; background: var(--mario-card);
+}
+.continue-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.continue-ep-badge {
+  position: absolute; bottom: 5px; left: 5px;
+  background: rgba(0,0,0,0.75); color: white; font-size: 11px; font-weight: 700;
+  padding: 2px 6px; border-radius: 4px;
+}
+.continue-progress { height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; margin-top: 6px; }
+.continue-progress-fill { height: 100%; background: var(--mario-red); border-radius: 2px; }
+.continue-title {
+  margin-top: 5px; font-size: 11px; font-weight: 700;
+  color: var(--mario-text); line-height: 1.3;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+
+/* ===== ANIME GRID ===== */
+.anime-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 0 12px;
+  max-width: 600px; margin: 0 auto;
+}
+@media (min-width: 400px) {
+  .anime-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.anime-card {
+  background: var(--mario-card); border-radius: var(--radius-sm);
+  overflow: hidden; cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
+  border: 1px solid var(--mario-border);
+}
+.anime-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.card-img-wrap { position: relative; aspect-ratio: 2/3; overflow: hidden; }
+.card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+.anime-card:hover .card-img { transform: scale(1.05); }
+.card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+}
+.card-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(229,34,34,0.85);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s;
+}
+.anime-card:hover .card-play { opacity: 1; }
+.card-play svg { width: 14px; height: 14px; fill: white; }
+.card-badge {
+  position: absolute; top: 6px; left: 6px;
+  background: var(--mario-blue); color: white;
+  font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;
+}
+.card-ep-badge {
+  position: absolute; bottom: 6px; left: 6px;
+  background: var(--mario-red); color: white;
+  font-family: var(--font-fredoka); font-size: 11px;
+  padding: 2px 6px; border-radius: 4px;
+}
+.card-body { padding: 7px 8px 9px; }
+.card-title {
+  font-size: 11px; font-weight: 700; line-height: 1.35;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  color: var(--mario-text);
+}
+.card-meta { font-size: 11px; color: var(--mario-yellow); margin-top: 3px; }
+.card-score { display: flex; align-items: center; gap: 2px; }
+
+/* ===== GENRE GRID ===== */
+.genre-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 10px; padding: 0 12px;
+  max-width: 600px; margin: 0 auto;
+}
+.genre-card {
+  background: var(--mario-card);
+  border: 1.5px solid var(--mario-border);
+  border-radius: var(--radius-sm);
+  padding: 16px; cursor: pointer;
+  transition: all 0.18s; text-align: center;
+}
+.genre-card:hover {
+  border-color: var(--mario-red); background: rgba(229,34,34,0.1);
+  transform: translateY(-2px);
+}
+.genre-name { font-family: var(--font-fredoka); font-size: 16px; }
+
+/* ===== PAGE HEADER ===== */
+.page-header { padding: 20px 16px 14px; max-width: 600px; margin: 0 auto; }
+.page-title {
+  font-family: var(--font-fredoka); font-size: 22px;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+}
+.page-desc { font-size: 13px; color: var(--mario-muted); }
+
+/* ===== PAGINATION ===== */
+.pagination {
+  display: flex; justify-content: center; gap: 8px;
+  padding: 20px 16px 100px;
+}
+.page-btn {
+  padding: 7px 14px; border-radius: var(--radius-sm);
+  background: var(--mario-card); border: 1.5px solid var(--mario-border);
+  font-family: var(--font-fredoka); font-size: 15px; color: var(--mario-text);
+  transition: all 0.18s;
+}
+.page-btn:hover { border-color: var(--mario-red); }
+.page-btn.active { background: var(--mario-red); border-color: var(--mario-red); }
+
+/* ===== DETAIL PAGE ===== */
+.detail-wrapper { max-width: 600px; margin: 0 auto; padding: 16px 16px 100px; }
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 50px;
+  background: var(--mario-card); border: 1.5px solid var(--mario-border);
+  font-family: var(--font-fredoka); font-size: 14px; color: var(--mario-text);
+  margin-bottom: 16px; transition: all 0.18s;
+}
+.back-btn:hover { border-color: var(--mario-red); }
+.detail-hero { display: flex; gap: 14px; margin-bottom: 20px; }
+.detail-poster {
+  width: 110px; flex-shrink: 0;
+  border-radius: var(--radius-sm); overflow: hidden;
+}
+.detail-poster img { width: 100%; aspect-ratio: 2/3; object-fit: cover; }
+.detail-info { flex: 1; }
+.detail-title { font-family: var(--font-fredoka); font-size: 18px; line-height: 1.3; margin-bottom: 8px; }
+.detail-genres { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.genre-tag {
+  padding: 4px 10px; border-radius: 50px;
+  background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.4);
+  font-size: 11px; font-weight: 700; color: var(--mario-sky); cursor: pointer;
+}
+.detail-desc { font-size: 13px; color: var(--mario-muted); line-height: 1.6; margin-bottom: 12px; }
+.detail-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.meta-item { background: var(--mario-card); border-radius: var(--radius-sm); padding: 8px 10px; }
+.meta-key { font-size: 10px; color: var(--mario-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+.meta-val { font-size: 13px; font-weight: 700; }
+.glow-line { height: 2px; background: linear-gradient(90deg, transparent, var(--mario-red), transparent); margin: 16px 0; border-radius: 2px; }
+.ep-section-title {
+  font-family: var(--font-fredoka); font-size: 17px;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.ep-count {
+  background: var(--mario-red); color: white;
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 50px;
+}
+.episode-list { display: flex; flex-direction: column; gap: 8px; }
+.ep-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--mario-card); border-radius: var(--radius-sm);
+  padding: 12px; cursor: pointer;
+  border: 1.5px solid var(--mario-border);
+  transition: all 0.18s;
+}
+.ep-item:hover { border-color: var(--mario-red); }
+.ep-play-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--mario-red); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ep-play-icon svg { width: 12px; height: 12px; fill: white; }
+.ep-info { flex: 1; }
+.ep-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.ep-date { font-size: 11px; color: var(--mario-muted); }
+.watch-ep-progress-bar { height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 5px; }
+.watch-ep-progress-fill { height: 100%; background: var(--mario-red); border-radius: 2px; }
+
+/* ===== WATCH PAGE ===== */
+.watch-wrapper { max-width: 600px; margin: 0 auto; padding-bottom: 100px; }
+.watch-back-area { padding: 14px 16px 0; }
+.watch-title-area { padding: 10px 16px; }
+.watch-title { font-family: var(--font-fredoka); font-size: 16px; line-height: 1.3; }
+.watch-video-area { width: 100%; }
+.video-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
+.video-container iframe { width: 100%; height: 100%; border: none; }
+.no-stream { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 10px; color: var(--mario-muted); font-family: var(--font-fredoka); }
+.no-stream-icon { font-size: 40px; }
+.watch-servers-area { padding: 12px 16px; }
+.server-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.server-tab {
+  padding: 7px 14px; border-radius: var(--radius-sm);
+  background: var(--mario-card); border: 1.5px solid var(--mario-border);
+  font-family: var(--font-fredoka); font-size: 14px; color: var(--mario-text);
+  transition: all 0.18s;
+}
+.server-tab.active { background: var(--mario-red); border-color: var(--mario-red); }
+.watch-naveps-area { padding: 0 16px 12px; }
+.nav-eps { display: flex; gap: 10px; }
+.ep-nav-btn {
+  flex: 1; padding: 10px; border-radius: var(--radius-sm);
+  background: var(--mario-card); border: 1.5px solid var(--mario-border);
+  font-family: var(--font-fredoka); font-size: 13px; color: var(--mario-text);
+  transition: all 0.18s;
+}
+.ep-nav-btn:hover:not(:disabled) { border-color: var(--mario-red); }
+.ep-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.watch-eplist-area { padding: 0 16px 12px; }
+.watch-ep-panel { background: var(--mario-card); border-radius: var(--radius); border: 1.5px solid var(--mario-border); overflow: hidden; }
+.watch-ep-panel-header { padding: 12px 14px; font-family: var(--font-fredoka); font-size: 15px; border-bottom: 1.5px solid var(--mario-border); }
+.watch-ep-list { max-height: 240px; overflow-y: auto; }
+.watch-ep-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--mario-border); transition: background 0.15s; }
+.watch-ep-item:hover { background: rgba(229,34,34,0.1); }
+.watch-ep-item.active { background: rgba(229,34,34,0.18); border-left: 3px solid var(--mario-red); }
+.watch-ep-item-title { font-size: 13px; font-weight: 700; }
+.watch-download-area { padding: 0 16px 16px; }
+.download-section { background: var(--mario-card); border-radius: var(--radius); border: 1.5px solid var(--mario-border); padding: 14px; }
+.download-title { font-family: var(--font-fredoka); font-size: 15px; margin-bottom: 12px; }
+.dl-group { margin-bottom: 12px; }
+.dl-quality { font-size: 13px; font-weight: 700; color: var(--mario-yellow); margin-bottom: 6px; }
+.dl-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.dl-link {
+  padding: 5px 12px; border-radius: var(--radius-sm);
+  background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.4);
+  font-size: 12px; font-weight: 700; color: var(--mario-sky);
+  transition: all 0.18s;
+}
+.dl-link:hover { background: rgba(37,99,235,0.35); }
+
+/* ===== HISTORY / LIBRARY ===== */
+.history-section { max-width: 600px; margin: 0 auto; padding: 0 12px 100px; }
+.history-panel { background: var(--mario-card); border-radius: var(--radius); border: 1.5px solid var(--mario-border); overflow: hidden; }
+.history-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1.5px solid var(--mario-border); font-family: var(--font-fredoka); font-size: 16px; }
+.history-clear-btn { padding: 6px 12px; border-radius: var(--radius-sm); background: rgba(229,34,34,0.2); border: 1px solid rgba(229,34,34,0.4); color: var(--mario-red); font-family: var(--font-fredoka); font-size: 13px; }
+.history-list { display: flex; flex-direction: column; }
+.history-item { display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--mario-border); cursor: pointer; transition: background 0.15s; }
+.history-item:hover { background: rgba(229,34,34,0.08); }
+.history-thumb { width: 56px; height: 78px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0; }
+.history-info { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
+.history-title { font-size: 13px; font-weight: 700; }
+.history-ep { font-size: 12px; color: var(--mario-muted); }
+.history-time { font-size: 11px; color: var(--mario-muted); }
+.history-progress-bar { height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 5px; }
+.history-progress-fill { height: 100%; background: var(--mario-red); border-radius: 2px; }
+.history-empty { padding: 40px 20px; text-align: center; color: var(--mario-muted); font-family: var(--font-fredoka); font-size: 16px; line-height: 1.8; }
+
+/* ===== SETTING / PROFIL ===== */
+.setting-wrap { max-width: 600px; margin: 0 auto; padding: 0 12px 100px; display: flex; flex-direction: column; gap: 10px; }
+.profile-card {
+  background: linear-gradient(135deg, var(--mario-red-dark), var(--mario-red));
+  border-radius: var(--radius); padding: 24px;
+  text-align: center; margin-bottom: 6px;
+}
+.profile-avatar { font-size: 48px; margin-bottom: 10px; }
+.profile-name { font-family: var(--font-fredoka); font-size: 22px; margin-bottom: 4px; }
+.profile-sub { font-size: 13px; opacity: 0.8; }
+.setting-card {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--mario-card); border-radius: var(--radius);
+  border: 1.5px solid var(--mario-border); padding: 14px 16px;
+  cursor: pointer; transition: border-color 0.18s;
+}
+.setting-card:hover { border-color: var(--mario-red); }
+.setting-icon { font-size: 22px; flex-shrink: 0; }
+.setting-info { flex: 1; }
+.setting-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.setting-desc { font-size: 12px; color: var(--mario-muted); }
+.setting-badge {
+  padding: 4px 10px; border-radius: 50px;
+  background: rgba(255,255,255,0.08); border: 1px solid var(--mario-border);
+  font-size: 12px; font-weight: 700;
+}
+.setting-badge.on { background: rgba(22,163,74,0.2); border-color: var(--mario-green); color: var(--mario-green-light); }
+.setting-arrow { font-size: 20px; color: var(--mario-muted); }
+
+/* ===== BOTTOM NAVBAR ===== */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: var(--bnav-h);
+  background: var(--mario-dark2);
+  border-top: 2px solid var(--mario-border);
+  display: flex; align-items: center; justify-content: space-around;
+  z-index: 1000; padding: 0 10px;
+  backdrop-filter: blur(16px);
+}
+.bnav-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; flex: 1; padding: 6px 4px;
+  color: var(--mario-muted); transition: all 0.18s; border-radius: var(--radius-sm);
+}
+.bnav-item.active { color: var(--mario-red); }
+.bnav-item.active .bnav-icon { transform: scale(1.15); }
+.bnav-icon { font-size: 20px; transition: transform 0.18s; }
+.bnav-label { font-size: 10px; font-weight: 700; font-family: var(--font-nunito); }
+
+.bnav-center-btn {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--mario-red), var(--mario-red-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(229,34,34,0.5);
+  transition: all 0.2s;
+}
+.bnav-center-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(229,34,34,0.6); }
+
+/* ===== LOADING / EMPTY STATES ===== */
+.loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40vh; gap: 14px; color: var(--mario-muted); font-family: var(--font-fredoka); font-size: 16px; }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--mario-border); border-top-color: var(--mario-red); border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 30vh; gap: 12px; color: var(--mario-muted); font-family: var(--font-fredoka); text-align: center; padding: 40px 20px; }
+.empty-icon { font-size: 40px; }
+.empty-title { font-size: 18px; color: var(--mario-text); }
+
+.loading-dots { display: flex; gap: 8px; align-items: center; padding: 20px 0; }
+.loading-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--mario-red); animation: dotBounce 0.7s infinite alternate; }
+.loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes dotBounce { from { transform: translateY(0); opacity: 0.4; } to { transform: translateY(-8px); opacity: 1; } }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed; bottom: calc(var(--bnav-h) + 14px); left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--mario-card); border: 1.5px solid var(--mario-red);
+  color: var(--mario-text); padding: 10px 20px;
+  border-radius: var(--radius); font-family: var(--font-fredoka); font-size: 14px;
+  opacity: 0; pointer-events: none; white-space: nowrap;
+  transition: all 0.3s; z-index: 2000;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ===== SEARCH BAR FOCUS ===== */
+input:focus { outline: none; }
+
+/* ===== SCROLLBAR IN LIST ===== */
+.watch-ep-list::-webkit-scrollbar { width: 4px; }
+.watch-ep-list::-webkit-scrollbar-track { background: var(--mario-dark2); }
+.watch-ep-list::-webkit-scrollbar-thumb { background: var(--mario-red); border-radius: 2px; }
+
+/* ===== SAFE AREA ===== */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .bottom-nav { padding-bottom: calc(env(safe-area-inset-bottom) + 4px); height: calc(var(--bnav-h) + env(safe-area-inset-bottom)); }
+}
