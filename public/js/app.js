@@ -1,25 +1,49 @@
 /* ============================================================
-   KMOLI — app.js (Minecraft Style + Riwayat + Episode Panel)
+   MOLI — app.js (Mario Edition)
    ============================================================ */
 
 // ============================================================
-// NAVBAR SCROLL
+// INIT EVENTS
 // ============================================================
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 30);
-});
-document.getElementById('navSearch').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') doSearch();
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('navSearch').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doSearch();
+  });
 });
 
 // ============================================================
-// MOBILE MENU
+// BOTTOM NAV SYNC
 // ============================================================
-function toggleMenu() {
-  document.getElementById('hamburger').classList.toggle('open');
-  document.getElementById('mobileMenu').classList.toggle('open');
+function syncBottomNav(page) {
+  document.querySelectorAll('.bnav-item').forEach(btn => {
+    const p = btn.getAttribute('data-bnav');
+    btn.classList.toggle('active', p === page || (p === 'history' && page === 'history') || (p === 'setting' && page === 'setting'));
+  });
+  // home special: also match genre-detail, detail, watch, search, latest -> home active
+  if (['home','latest','search','detail','watch','genre-detail'].includes(page)) {
+    document.querySelectorAll('.bnav-item').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-bnav') === 'home' && ['home'].includes(page));
+    });
+  }
 }
+
+// ============================================================
+// HELPER UI
+// ============================================================
+function focusSearch() {
+  const inp = document.getElementById('navSearch');
+  if (inp) { inp.focus(); inp.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+
+function filterCat(el) {
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ============================================================
+// MOBILE MENU (kept for compat)
+// ============================================================
+function toggleMenu() {}
 
 // ============================================================
 // TOAST
@@ -107,7 +131,7 @@ let _genrePage = 1;
 let currentGenreSlug = '';
 let currentGenreName = '';
 
-const pages = ['home', 'latest', 'search', 'genres', 'genre-detail', 'detail', 'watch', 'history'];
+const pages = ['home', 'latest', 'search', 'genres', 'genre-detail', 'detail', 'watch', 'history', 'setting'];
 
 // Map page name → URL path
 const PAGE_PATHS = {
@@ -139,6 +163,17 @@ function showPage(name, push = true, rawUrl = null, pathOverride = null) {
     const path = pathOverride || PAGE_PATHS[name] || '/';
     history.pushState({ page: name, rawUrl: rawUrl }, '', path);
   }
+
+  // Sync bottom nav
+  document.querySelectorAll('.bnav-item').forEach(btn => {
+    const p = btn.getAttribute('data-bnav');
+    let active = false;
+    if (p === 'home' && ['home','latest','search','detail','watch'].includes(name)) active = true;
+    if (p === 'genres' && ['genres','genre-detail'].includes(name)) active = true;
+    if (p === 'history' && name === 'history') active = true;
+    if (p === 'setting' && name === 'setting') active = true;
+    btn.classList.toggle('active', active);
+  });
 
   // Stop timer kalau keluar dari watch
   if (name !== 'watch') stopProgressTracking();
@@ -235,8 +270,9 @@ async function loadHome() {
     const sectionEl = document.createElement('div');
     sectionEl.className = 'home-section';
     sectionEl.innerHTML =
-      '<div class="section-header" style="padding:0 24px;margin-bottom:14px;">' +
-        '<h2 class="section-title">' + section.title + '</h2>' +
+      '<div class="section-header">' +
+        '<h2 class="section-title"><span class="section-title-dot red"></span>' + section.title.replace(/^[^\s]+\s/, '') + '</h2>' +
+        '<a href="#" class="see-all" onclick="showPage(\'latest\')">SEMUA &rsaquo;</a>' +
       '</div>' +
       '<div class="hscroll-wrap">' +
         '<div class="hscroll-inner hscroll-loading">' +
@@ -262,7 +298,7 @@ async function loadHome() {
       }
 
       if (!items.length) {
-        scrollInner.innerHTML = '<div style="font-family:var(--font-pixel);font-size:8px;color:var(--mc-stone);padding:20px;text-shadow:1px 1px 0 #000;">TIDAK ADA DATA</div>';
+        scrollInner.innerHTML = '<div style="font-family:var(--font-fredoka);font-size:8px;color:var(--mario-muted);padding:20px;text-shadow:1px 1px 0 #000;">TIDAK ADA DATA</div>';
         return;
       }
 
@@ -274,7 +310,7 @@ async function loadHome() {
           '<div class="hscroll-card" onclick="loadDetail(\'' + esc(item.url) + '\')">' +
             '<div class="hscroll-img-wrap">' +
               '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" loading="lazy"' +
-                ' onerror="this.src=\'https://via.placeholder.com/120x170/1a1a1a/5aac27?text=?\'" />' +
+                ' onerror="this.src=\'https://via.placeholder.com/120x170/1e1e32/e52222?text=?\'" />' +
               (ep ? '<div class="hscroll-badge">' + ep + '</div>' : '') +
             '</div>' +
             '<div class="hscroll-title">' + esc(title) + '</div>' +
@@ -283,29 +319,43 @@ async function loadHome() {
       }).join('');
 
     } catch(e) {
-      scrollInner.innerHTML = '<div style="font-family:var(--font-pixel);font-size:8px;color:var(--mc-stone);padding:20px;text-shadow:1px 1px 0 #000;">GAGAL MEMUAT</div>';
+      scrollInner.innerHTML = '<div style="font-family:var(--font-fredoka);font-size:8px;color:var(--mario-muted);padding:20px;text-shadow:1px 1px 0 #000;">GAGAL MEMUAT</div>';
     }
   });
 }
 
 
 function renderHomeHistory() {
-  const list = getHistory().slice(0, 6);
+  const list = getHistory().slice(0, 8);
   const sec = document.getElementById('homeHistorySection');
   if (!sec) return;
   if (!list.length) { sec.innerHTML = ''; return; }
   const prog = getProgress();
   sec.innerHTML = `
-    <div class="section" style="padding-top:0">
+    <div class="continue-section">
       <div class="section-header">
-        <h2 class="section-title"><span class="title-icon">📖</span>LANJUTKAN NONTON</h2>
-        <a href="#" class="see-all" onclick="showPage('history')">LIHAT SEMUA →</a>
+        <h2 class="section-title"><span class="section-title-dot red"></span>Lanjutkan Nonton</h2>
+        <a href="#" class="see-all" onclick="showPage('history')">SEMUA &rsaquo;</a>
       </div>
-      <div class="history-panel">
-        <div class="history-list">
-          ${list.map(h => historyItemHtml(h, prog[h.epUrl])).join('')}
+      <div class="continue-scroll">
+        <div class="continue-inner">
+          ${list.map(h => continueCardHtml(h, prog[h.epUrl])).join('')}
         </div>
       </div>
+    </div>
+  `;
+}
+
+function continueCardHtml(h, p) {
+  const pct = p ? p.pct : 0;
+  return `
+    <div class="continue-card" onclick="loadWatch('${esc(h.epUrl)}','${esc(h.epTitle)}','${esc(h.animeUrl)}')">
+      <div class="continue-thumb">
+        <img src="${esc(h.image)}" alt="${esc(h.animeTitle)}" onerror="this.src='https://via.placeholder.com/140x85/1e1e32/e52222?text=?'" />
+        <div class="continue-ep-badge">${esc(h.epTitle.substring(0,12))}</div>
+      </div>
+      <div class="continue-progress"><div class="continue-progress-fill" style="width:${pct}%"></div></div>
+      <div class="continue-title">${esc(h.animeTitle)}</div>
     </div>
   `;
 }
@@ -314,7 +364,7 @@ function historyItemHtml(h, p) {
   const pct = p ? p.pct : 0;
   return `
     <div class="history-item" onclick="loadWatch('${esc(h.epUrl)}','${esc(h.epTitle)}','${esc(h.animeUrl)}')">
-      <img class="history-thumb" src="${esc(h.image)}" alt="${esc(h.animeTitle)}" onerror="this.src='https://via.placeholder.com/44x62/1a1a1a/5aac27?text=?'" />
+      <img class="history-thumb" src="${esc(h.image)}" alt="${esc(h.animeTitle)}" onerror="this.src='https://via.placeholder.com/44x62/1e1e32/e52222?text=?'" />
       <div class="history-info">
         <div class="history-title">${esc(h.animeTitle)}</div>
         <div class="history-ep">${esc(h.epTitle)}</div>
@@ -462,7 +512,7 @@ function renderDetail(data, url) {
       </button>
       <div class="detail-hero">
         <div class="detail-poster">
-          <img src="${esc(data.image)}" alt="${esc(data.title)}" loading="lazy" onerror="this.src='https://via.placeholder.com/200x280/1a1a1a/5aac27?text=?'" />
+          <img src="${esc(data.image)}" alt="${esc(data.title)}" loading="lazy" onerror="this.src='https://via.placeholder.com/200x280/1e1e32/e52222?text=?'" />
         </div>
         <div class="detail-info">
           <h1 class="detail-title">${esc(data.title)}</h1>
@@ -551,7 +601,7 @@ function renderWatch(data, url, title) {
   // Build episode list from currentEpisodes or fallback
   const epListItems = currentEpisodes.length > 0
     ? currentEpisodes.map((ep, i) => buildWatchEpItem(ep, url, i)).join('')
-    : '<div style="padding:20px;font-family:var(--font-pixel);font-size:8px;color:var(--mc-stone);text-shadow:1px 1px 0 #000;text-align:center;">BUKA DETAIL<br/>UNTUK LIST EP</div>';
+    : '<div style="padding:20px;font-family:var(--font-fredoka);font-size:8px;color:var(--mario-muted);text-shadow:1px 1px 0 #000;text-align:center;">BUKA DETAIL<br/>UNTUK LIST EP</div>';
 
   const prog = getProgressFor(url);
   const savedSec = prog ? prog.seconds : 0;
@@ -577,7 +627,7 @@ function renderWatch(data, url, title) {
 
       ${currentStreams.length > 1 ? `
         <div class="watch-servers-area">
-          <p style="font-family:var(--font-pixel);font-size:7px;color:var(--mc-gray);margin-bottom:7px;text-shadow:1px 1px 0 #000;">SERVER:</p>
+          <p style="font-family:var(--font-fredoka);font-size:7px;color:var(--mc-gray);margin-bottom:7px;text-shadow:1px 1px 0 #000;">SERVER:</p>
           <div class="server-tabs">${serverTabsHtml}</div>
         </div>
       ` : '<div class="watch-servers-area"></div>'}
@@ -729,7 +779,7 @@ function clearHistory() {
   localStorage.removeItem(PROGRESS_KEY);
   renderHistoryPage();
   renderHomeHistory();
-  showToast('⛏ Riwayat dihapus!');
+  showToast('🍄 Riwayat dihapus!');
 }
 
 // ============================================================
@@ -774,7 +824,7 @@ function animeCard(item, mode = 'detail') {
     <div class="anime-card" onclick="${onclick}">
       <div class="card-img-wrap">
         <img class="card-img" src="${esc(item.image)}" alt="${esc(item.title)}" loading="lazy"
-          onerror="this.src='https://via.placeholder.com/160x224/1a1a1a/5aac27?text=?'" />
+          onerror="this.src='https://via.placeholder.com/160x224/1e1e32/e52222?text=?'" />
         <div class="card-overlay"></div>
         <div class="card-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         ${typeBadge}
