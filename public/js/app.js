@@ -873,17 +873,128 @@ function emptyState(icon, title, msg) {
 }
 
 // ============================================================
-// INIT
+// HERO GENRE SLIDER
 // ============================================================
+const HERO_GENRES = [
+  { slug: 'isekai',      label: '🌀 Isekai',      emoji: '🌀' },
+  { slug: 'petualangan', label: '⚔️ Petualangan',  emoji: '⚔️' },
+  { slug: 'horor',       label: '👻 Horor',        emoji: '👻' },
+  { slug: 'action',      label: '💥 Action',       emoji: '💥' },
+  { slug: 'fantasy',     label: '✨ Fantasy',      emoji: '✨' },
+  { slug: 'romance',     label: '❤️ Romance',      emoji: '❤️' },
+];
+
+let heroSlides = [];
+let heroIdx = 0;
+let heroTimer = null;
+
+async function loadHeroSlider() {
+  // Fetch satu genre random dulu, sisanya lazy
+  const shuffled = [...HERO_GENRES].sort(() => Math.random() - 0.5);
+  const picked = shuffled.slice(0, 5);
+
+  const results = await Promise.all(
+    picked.map(async (g) => {
+      try {
+        const res = await fetch(`/api/genre/${g.slug}`);
+        const data = await res.json();
+        const list = (data.animes || []).filter(a => a.image);
+        if (!list.length) return null;
+        // Ambil anime random dari halaman
+        const anime = list[Math.floor(Math.random() * Math.min(list.length, 8))];
+        return { ...anime, genreLabel: g.label, genreSlug: g.slug };
+      } catch { return null; }
+    })
+  );
+
+  heroSlides = results.filter(Boolean);
+  if (!heroSlides.length) {
+    // fallback to latest
+    try {
+      const res = await fetch('/api/latest');
+      const list = await res.json();
+      heroSlides = list.slice(0, 5).map(a => ({ ...a, genreLabel: '⚡ Terbaru', genreSlug: '' }));
+    } catch {}
+  }
+  if (!heroSlides.length) return;
+
+  renderHeroSlides();
+  heroIdx = 0;
+  updateHeroContent(0);
+  buildHeroDots();
+  startHeroTimer();
+}
+
+function renderHeroSlides() {
+  const container = document.getElementById('heroSlides');
+  if (!container) return;
+  container.innerHTML = heroSlides.map((s, i) =>
+    `<div class="hero-slide-img${i === 0 ? ' active' : ''}" 
+      style="background-image:url('${esc(s.image)}')" 
+      data-idx="${i}"></div>`
+  ).join('');
+}
+
+function updateHeroContent(idx) {
+  const s = heroSlides[idx];
+  if (!s) return;
+
+  const tag = document.getElementById('heroGenreTag');
+  const title = document.getElementById('heroTitle');
+  const btnWatch = document.getElementById('heroBtnWatch');
+  const btnDetail = document.getElementById('heroBtnDetail');
+
+  if (tag) tag.textContent = s.genreLabel;
+  if (title) title.textContent = s.title || '—';
+  if (btnWatch) btnWatch.onclick = () => loadDetail(s.url);
+  if (btnDetail) btnDetail.onclick = () => loadDetail(s.url);
+
+  // Switch active slide image
+  document.querySelectorAll('.hero-slide-img').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+
+  // Sync dots
+  document.querySelectorAll('#heroDots .dot').forEach((d, i) => {
+    d.classList.toggle('active', i === idx);
+  });
+}
+
+function buildHeroDots() {
+  const dotsEl = document.getElementById('heroDots');
+  if (!dotsEl) return;
+  dotsEl.innerHTML = heroSlides.map((_, i) =>
+    `<span class="dot${i === 0 ? ' active' : ''}" onclick="heroGoTo(${i})"></span>`
+  ).join('');
+}
+
+function heroGoTo(idx) {
+  heroIdx = idx;
+  updateHeroContent(idx);
+  resetHeroTimer();
+}
+
+function startHeroTimer() {
+  heroTimer = setInterval(() => {
+    heroIdx = (heroIdx + 1) % heroSlides.length;
+    updateHeroContent(heroIdx);
+  }, 4500);
+}
+
+function resetHeroTimer() {
+  if (heroTimer) clearInterval(heroTimer);
+  startHeroTimer();
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
-  // replaceState dulu supaya halaman pertama masuk history
-  // Jadi tombol back tidak langsung keluar dari web
   history.replaceState(
     { page: _getPageFromPath(location.pathname, location.search), rawUrl: new URLSearchParams(location.search).get('url') },
     '',
     location.pathname + location.search
   );
   _routeFromPath(location.pathname, location.search);
+  loadHeroSlider();
 });
 
 function _getPageFromPath(path, search) {
