@@ -876,12 +876,21 @@ function emptyState(icon, title, msg) {
 // HERO GENRE SLIDER
 // ============================================================
 const HERO_GENRES = [
-  { slug: 'isekai',      label: '🌀 Isekai',      emoji: '🌀' },
-  { slug: 'petualangan', label: '⚔️ Petualangan',  emoji: '⚔️' },
-  { slug: 'horor',       label: '👻 Horor',        emoji: '👻' },
-  { slug: 'action',      label: '💥 Action',       emoji: '💥' },
-  { slug: 'fantasy',     label: '✨ Fantasy',      emoji: '✨' },
-  { slug: 'romance',     label: '❤️ Romance',      emoji: '❤️' },
+  { slug: 'isekai',        label: '🌀 Isekai' },
+  { slug: 'petualangan',   label: '⚔️ Petualangan' },
+  { slug: 'horor',         label: '👻 Horor' },
+  { slug: 'action',        label: '💥 Action' },
+  { slug: 'fantasy',       label: '✨ Fantasy' },
+  { slug: 'romance',       label: '❤️ Romance' },
+  { slug: 'comedy',        label: '😂 Comedy' },
+  { slug: 'drama',         label: '🎭 Drama' },
+  { slug: 'shounen',       label: '🔥 Shounen' },
+  { slug: 'supernatural',  label: '🌙 Supernatural' },
+  { slug: 'sci-fi',        label: '🚀 Sci-Fi' },
+  { slug: 'slice-of-life', label: '🌸 Slice of Life' },
+  { slug: 'mecha',         label: '🤖 Mecha' },
+  { slug: 'misteri',       label: '🔍 Misteri' },
+  { slug: 'psychological', label: '🧠 Psychological' },
 ];
 
 let heroSlides = [];
@@ -889,9 +898,9 @@ let heroIdx = 0;
 let heroTimer = null;
 
 async function loadHeroSlider() {
-  // Fetch satu genre random dulu, sisanya lazy
   const shuffled = [...HERO_GENRES].sort(() => Math.random() - 0.5);
-  const picked = shuffled.slice(0, 5);
+  // Ambil 8 genre, tiap genre ambil 1-2 anime → total ~10-12 slide
+  const picked = shuffled.slice(0, 8);
 
   const results = await Promise.all(
     picked.map(async (g) => {
@@ -899,21 +908,28 @@ async function loadHeroSlider() {
         const res = await fetch(`/api/genre/${g.slug}`);
         const data = await res.json();
         const list = (data.animes || []).filter(a => a.image);
-        if (!list.length) return null;
-        // Ambil anime random dari halaman
-        const anime = list[Math.floor(Math.random() * Math.min(list.length, 8))];
-        return { ...anime, genreLabel: g.label, genreSlug: g.slug };
-      } catch { return null; }
+        if (!list.length) return [];
+        // Ambil 2 anime berbeda dari tiap genre
+        const shuffledList = list.sort(() => Math.random() - 0.5);
+        return shuffledList.slice(0, 2).map(anime => ({
+          ...anime, genreLabel: g.label, genreSlug: g.slug
+        }));
+      } catch { return []; }
     })
   );
 
-  heroSlides = results.filter(Boolean);
+  // Flatten + shuffle lagi supaya genre tidak berurutan
+  heroSlides = results.flat().filter(Boolean).sort(() => Math.random() - 0.5);
+
+  // Batasi max 12 slide
+  if (heroSlides.length > 12) heroSlides = heroSlides.slice(0, 12);
+
   if (!heroSlides.length) {
     // fallback to latest
     try {
       const res = await fetch('/api/latest');
       const list = await res.json();
-      heroSlides = list.slice(0, 5).map(a => ({ ...a, genreLabel: '⚡ Terbaru', genreSlug: '' }));
+      heroSlides = list.slice(0, 8).map(a => ({ ...a, genreLabel: '⚡ Terbaru', genreSlug: '' }));
     } catch {}
   }
   if (!heroSlides.length) return;
