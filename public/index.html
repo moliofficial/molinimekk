@@ -35,22 +35,24 @@
     <!-- HOME PAGE -->
     <div id="page-home" class="page active">
 
-      <!-- HERO BANNER -->
-      <section class="hero">
-        <div class="hero-bg-art"></div>
-        <div class="hero-content">
-          <div class="hero-badge">🌟 #2 TERPOPULER</div>
-          <h1 class="hero-title">Gankutsuou</h1>
-          <div class="hero-actions">
-            <button class="btn-watch" onclick="showPage('latest')">▶ Tonton</button>
-            <button class="btn-info" onclick="showPage('genres')">ℹ Detail</button>
+      <!-- HERO BANNER (dynamic genre slider) -->
+      <section class="hero" id="heroSection">
+        <!-- slides injected by JS -->
+        <div class="hero-slides" id="heroSlides">
+          <div class="hero-slide-loading">
+            <div class="hero-spinner"></div>
           </div>
         </div>
-        <div class="slider-dots">
-          <span class="dot active"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
+        <div class="hero-overlay"></div>
+        <div class="hero-content" id="heroContent">
+          <div class="hero-genre-tag" id="heroGenreTag"></div>
+          <h1 class="hero-title" id="heroTitle">Memuat...</h1>
+          <div class="hero-actions">
+            <button class="btn-watch" id="heroBtnWatch">▶ Tonton</button>
+            <button class="btn-info" id="heroBtnDetail">ℹ Detail</button>
+          </div>
         </div>
+        <div class="slider-dots" id="heroDots"></div>
       </section>
 
       <!-- CATEGORY CHIPS -->
